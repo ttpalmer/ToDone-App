@@ -1,3 +1,6 @@
+import { AuthServiceProvider } from './../providers/auth-service/auth-service';
+
+import { SignUpPage } from './../pages/sign-up/sign-up';
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
@@ -6,25 +9,50 @@ import { StatusBar } from '@ionic-native/status-bar';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
+import { LoginPage } from './../pages/login/login';
+import { LaunchPage } from "./../pages/launch/launch";
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireAuthModule } from 'angularfire2/auth';
+
+
+
+const firebaseAuth = {
+  apiKey: "AIzaSyAENTge-cuAbAXzrrH_ScMnc6j-iJZGgiQ",
+  authDomain: "todone-usc546.firebaseapp.com",
+  databaseURL: "https://todone-usc546.firebaseio.com",
+  projectId: "todone-usc546",
+  storageBucket: "todone-usc546.appspot.com",
+  messagingSenderId: "232551817449"
+}
 
 @NgModule({
   declarations: [
     MyApp,
-    HomePage
+    HomePage,
+    SignUpPage,
+    LoginPage,
+    LaunchPage
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    AngularFireModule.initializeApp(firebaseAuth),
+    AngularFireAuthModule
+    
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage
+    HomePage,
+    SignUpPage,
+    LoginPage,
+    LaunchPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    AuthServiceProvider
   ]
 })
 export class AppModule {}
