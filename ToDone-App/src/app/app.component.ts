@@ -1,3 +1,4 @@
+import { LaunchPage } from './../pages/launch/launch';
 import { LoginPage } from './../pages/login/login';
 import { AuthServiceProvider } from './../providers/auth-service/auth-service';
 import { SignUpPage } from './../pages/sign-up/sign-up';
@@ -7,11 +8,14 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
-import { LaunchPage } from '../pages/launch/launch';
+
 import { AddGoalPage } from '../pages/addgoal/addgoal';
+
 
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
+
+import firebase from 'firebase';
 
 
 @Component({
@@ -20,38 +24,54 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 export class MyApp {
   [x: string]: any;
   statusBar: any;
-  rootPage:any = LaunchPage;
+  
   private app;
   private platform;
 
   constructor(app: App, private auth: AuthServiceProvider, platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
+    {
+    /*  this.platform.ready().then(() => {
+        this.statusBar.styleDefault();
+        this.splashScreen.hide();
+      });*/
     this.app = app;
     this.platform = platform;
-    
-
-    
-  }
-
-  initializeApp()
-  {
-    this.platform.ready().then(() => {
-      this.statusBar.styleDefault();
-      this.splashScreen.hide();
-    });
-    this.auth.afAuth.authState
-    .subscribe(
-      user => {
-        if (user) {
-          this.rootPage = HomePage;
-        } else {
-          this.rootPage = LoginPage;
-        }
-      },
-      () => {
-        this.rootPage = LoginPage;
+    const unsubscribe = firebase.auth().onAuthStateChanged(user =>{
+      if (!user)
+      {
+        this.rootPage = LaunchPage;
       }
-    );
+      else{
+        this.rootPage = HomePage;
+        unsubscribe();
+      }
+    });
+    
 
+    
   }
+
+  // initializeApp()
+  // {
+  //   this.platform.ready().then(() => {
+  //     this.statusBar.styleDefault();
+  //     this.splashScreen.hide();
+  //   });
+  //   this.auth.afAuth.authState
+  //   .subscribe(
+  //     user => {
+  //       if (user) {
+  //         this.rootPage = HomePage;
+  //       } else {
+  //         this.rootPage = LaunchPage;
+  //       }
+  //     },
+  //     () => {
+  //       this.rootPage = LoginPage;
+  //     }
+  //   );
+
+  // }
+}
 }
 
