@@ -11,6 +11,7 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { LoginPage } from './../pages/login/login';
 import { LaunchPage } from "./../pages/launch/launch";
+import { AddGoalPage } from './../pages/addgoal/addgoal';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 
@@ -31,7 +32,8 @@ const firebaseAuth = {
     HomePage,
     SignUpPage,
     LoginPage,
-    LaunchPage
+    LaunchPage,
+    AddGoalPage
   ],
   imports: [
     BrowserModule,
@@ -46,7 +48,8 @@ const firebaseAuth = {
     HomePage,
     SignUpPage,
     LoginPage,
-    LaunchPage
+    LaunchPage,
+    AddGoalPage
   ],
   providers: [
     StatusBar,
