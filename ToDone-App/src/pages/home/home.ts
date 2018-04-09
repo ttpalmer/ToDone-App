@@ -4,7 +4,6 @@ import { AddGoalPage } from "../addgoal/addgoal";
 import { GoalTasksPage } from "../goal-tasks/goal-tasks";
 
 
-@IonicPage()
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -12,7 +11,7 @@ import { GoalTasksPage } from "../goal-tasks/goal-tasks";
 export class HomePage {
   goals: any[]; 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController) {
     
   }
   
@@ -20,7 +19,7 @@ export class HomePage {
     let addGoal = this.modalCtrl.create(AddGoalPage);
     addGoal.onDidDismiss((goal) => {
       if(goal) {
-        this.saveGoal(goal);
+        //this.saveGoal(goal);
       }
     });
 
