@@ -14,6 +14,7 @@ import { LaunchPage } from "./../pages/launch/launch";
 import { AddGoalPage } from './../pages/addgoal/addgoal';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
+import { Data } from '../providers/data/data';
 
 
 
@@ -55,7 +56,8 @@ const firebaseAuth = {
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    AuthServiceProvider
+    AuthServiceProvider,
+    Data
   ]
 })
 export class AppModule {}
