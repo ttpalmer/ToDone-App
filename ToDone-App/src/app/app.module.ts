@@ -14,7 +14,11 @@ import { LaunchPage } from "./../pages/launch/launch";
 import { AddGoalPage } from './../pages/addgoal/addgoal';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
+<<<<<<< HEAD
 import { Data } from '../providers/data/data';
+=======
+import { NgxErrorsModule } from '@ultimate/ngxerrors';
+>>>>>>> 4218e4220894b05857e355299e13415ea5761550
 
 
 
@@ -40,7 +44,8 @@ const firebaseAuth = {
     BrowserModule,
     IonicModule.forRoot(MyApp),
     AngularFireModule.initializeApp(firebaseAuth),
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    NgxErrorsModule
     
   ],
   bootstrap: [IonicApp],
