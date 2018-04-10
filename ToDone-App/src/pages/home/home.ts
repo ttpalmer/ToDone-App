@@ -1,7 +1,10 @@
+import { LaunchPage } from './../launch/launch';
+import { AuthServiceProvider } from './../../providers/auth-service/auth-service';
 import { Component } from '@angular/core';
 import { NavController, NavParams, ModalController } from 'ionic-angular';
 import { AddGoalPage } from "../addgoal/addgoal";
 import { GoalTasksPage } from "../goal-tasks/goal-tasks";
+
 
 import firebase from 'firebase';
 
@@ -12,7 +15,7 @@ import firebase from 'firebase';
 export class HomePage {
   goals: any[]; 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, private auth: AuthServiceProvider) {
     
   }
   
@@ -34,8 +37,9 @@ export class HomePage {
     });
   }
 
-  doLogout() : Promise<void>
+  Logout() 
   {
-    return firebase.auth().signOut();
+     this.auth.signOut();
+    this.navCtrl.setRoot(LaunchPage);
   }
 }

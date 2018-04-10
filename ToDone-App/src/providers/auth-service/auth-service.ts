@@ -21,8 +21,21 @@ export class AuthServiceProvider {
     });
   }
 
+  signInWithEmail(credentials)
+  {
+    console.log('Sign in with email');
+    return this.afAuth.auth.signInWithEmailAndPassword(credentials.email,credentials.password);
+  }
+
   getEmail() {
 		return this.user && this.user.email;
+  }
+  signOut(): Promise<void>{
+    return this.afAuth.auth.signOut();
+  }
+
+  signUp(credentials) {
+		return this.afAuth.auth.createUserWithEmailAndPassword(credentials.email,credentials.password);
 	}
 
 }
