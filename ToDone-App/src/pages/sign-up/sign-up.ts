@@ -19,10 +19,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   templateUrl: 'sign-up.html',
 })
 export class SignUpPage {
-  password: string = '';
+ /* password: string = '';
   username: string = '';
   verify: string = '';
-  email: string = '';
+  email: string = '';*/
 
   signupError: string;
 	form: FormGroup;
@@ -38,7 +38,7 @@ export class SignUpPage {
     console.log('ionViewDidLoad SignUpPage');
   }
 
-  async doRegister()
+ /* async doRegister()
   {
      var user =
     {
@@ -63,7 +63,7 @@ export class SignUpPage {
       console.error(e);
     }
   
-  }
+  }*/
 
   signup() {
 		let data = this.form.value;

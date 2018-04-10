@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { HomePage } from '../home/home';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 
 /**
  * Generated class for the LoginPage page.
@@ -26,8 +26,8 @@ export class LoginPage {
 
   constructor(private afAuth: AngularFireAuth, public navCtrl: NavController, public navParams: NavParams, fb: FormBuilder, private auth: AuthServiceProvider) {
     this.loginForm = fb.group({
-      email: ['', Validators.compose([Validators.required, Validators.email])],
-			password: ['', Validators.compose([Validators.required, Validators.minLength(6)])]
+      email: new FormControl ('', Validators.compose([Validators.required, Validators.email])),
+			password: new FormControl ('', Validators.compose([Validators.required, Validators.minLength(6)]))
     })
   }
 

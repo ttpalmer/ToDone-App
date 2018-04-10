@@ -18,6 +18,10 @@ export class HomePage {
   constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, private auth: AuthServiceProvider) {
     
   }
+
+  ionViewDidLoad(){
+   console.log('Signed in with email' + " "+ this.auth.getEmail());
+  }
   
   addYourGoal() {
     let addGoal = this.modalCtrl.create(AddGoalPage);
@@ -37,9 +41,9 @@ export class HomePage {
     });
   }
 
-  Logout() 
+  Logout() :void
   {
-     this.auth.signOut();
+    this.auth.signOut();
     this.navCtrl.setRoot(LaunchPage);
   }
 }
