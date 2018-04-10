@@ -1,7 +1,13 @@
 <ion-header>
+<<<<<<< HEAD
   <ion-navbar>
     <ion-buttons start>
       <button ion-button (click)='doLogout()'>
+=======
+  <ion-navbar color="primary">
+    <ion-buttons>
+      <button ion-button (click)="Logout()">
+>>>>>>> 8df8840b776ce30aa4739580e7cca159ef8211a9
         Logout
       </button>
     </ion-buttons>
@@ -18,8 +24,8 @@
 
 <ion-content padding>
   <ion-list>
-    <!--ion-item *ngFor="let goal of goals" (click)="viewGoalDetails(goal)">
+    <ion-item *ngFor="let goal of goals" (click)="viewGoalDetails(goal)">
       {{goal.title}}
-    </ion-item-->
+    </ion-item>
   </ion-list>
 </ion-content>
