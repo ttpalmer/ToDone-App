@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>sign-up</ion-title>
+    <ion-title>Register</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -15,33 +15,48 @@
 
 <ion-content padding>
 
-    <form (submit)="doRegister()">
+    <form (ngSubmit)="signup()" [formGroup] = "form">
         <ion-list padding inset scroll="false">
     
-          <ion-item>
+          <!-- <ion-item>
             <ion-label stacked>Username</ion-label>
             <ion-input type="text" [(ngModel)]="username" name="username"></ion-input>
+          </ion-item> -->
+
+          <!-- <ion-item>
+            <ion-label stacked>Email</ion-label>
+            <ion-input type="email" formControlName="email" ></ion-input>
           </ion-item>
           <ion-item>
             <ion-label stacked>Password</ion-label>
-            <ion-input type="password" [(ngModel)]="password" name="password"></ion-input>
-          </ion-item>
+            <ion-input type="password" formControlName = "password"></ion-input>
+          </ion-item> -->
+
           <!-- <ion-item>
             <ion-label stacked>Verify Password</ion-label>
             <ion-input type="password" [(ngModel)]="confirm" name="verify"></ion-input>
           </ion-item> -->
-          <ion-item>
-            <ion-label stacked>Email</ion-label>
-            <ion-input type="email" [(ngModel)]="email" name="confirm"></ion-input>
+
+          <ion-item >
+            <ion-input type="text" placeholder="Email" formControlName="email"></ion-input>
           </ion-item>
     
+          
+    
+          <ion-item >
+            <ion-input type="password" placeholder="Password" formControlName="password"></ion-input>
+          </ion-item>
+          
+        </ion-list>
           <div padding>
-            
-          </div> <button ion-button color="accent" block >Register</button>
+              <div class="form-error">{{signupError}}</div>
+
+            <button ion-button color="accent" type = "submit" [disabled]="!form.valid" >Register</button>
+          </div> 
     <!-- <button (click) = "doRegister()">
       Register
     </button> -->
-        </ion-list>
+        
         </form>
 
 </ion-content>

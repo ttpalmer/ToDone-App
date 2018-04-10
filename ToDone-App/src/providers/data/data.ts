@@ -2,6 +2,11 @@
 import { Injectable } from '@angular/core';
 
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 4bf4d3f46c2d2cea45935935592fd91686a936ed
 /*
   Generated class for the DataProvider provider.
 
