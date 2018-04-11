@@ -33,6 +33,7 @@ export class Data {
 
   }
 
+<<<<<<< Updated upstream
   userInfo(firstName:string, lastName:string): Promise<void>
   {
     var db = firebase.firestore();
@@ -62,4 +63,13 @@ return docRef.get().then(function(doc) {
 
   
 
+=======
+  getGoals() {
+    var mygoal = null;
+    console.log('getting goals');
+    return mygoal;
+    
+  }
+
+>>>>>>> Stashed changes
 }

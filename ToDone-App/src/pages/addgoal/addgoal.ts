@@ -19,7 +19,7 @@ export class AddGoalPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad AddgoalPage');
+    console.log('ionViewDidLoad AddGoalPage');
   }
 
   closeAddGoal() {
