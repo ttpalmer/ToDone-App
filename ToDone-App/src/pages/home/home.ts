@@ -13,10 +13,13 @@ import { GoalTasksPage } from "../goal-tasks/goal-tasks";
   selector: 'page-home',
   templateUrl: 'home.html'
 })
+
 export class HomePage {
 
+  public goals = {};
+
   constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public dataService: Data, private auth: AuthServiceProvider) {
-   this.dataService.getGoals()
+    this.goals = this.dataService.getGoals();
   }
 
   ionViewDidLoad(){

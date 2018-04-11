@@ -65,17 +65,21 @@ export class Data {
 
   getGoals() {
     var db = firebase.firestore();
-    console.log("start loading goals");
-    var goalRef = db.collection("Goals").doc("description");
-    return goalRef.get().then(function(doc) {
-      if (doc.exists) {
-        console.log("Document data: ", doc.data());
-      } else {
-        //doc.data() will be undefined in this case
-        console.log("No such document!");
-      }
-    }).catch(function(error) {
-      console.log("Error getting document: ", error);
+    var myGoals: any [];
+    return db.collection("Goals").get().then(function(querySnapshot) {
+      console.log("This collection size is " + querySnapshot.size);
+      querySnapshot.forEach(function(doc) {
+        // doc.data() is never undefined for query doc snapshots
+        console.log(doc.id, " => ", doc.data());
+        var queriedGoal = {
+          goalID : doc.id,
+          goalDescription: doc.data()
+        }
+        console.log("We got our goal " + queriedGoal.goalDescription);
+      });
+       //for(var i = querySnapshot.size - 1; i >= 0; i--) {
+         // console.log("loop runs");
+        //}
     });
   }
 }
