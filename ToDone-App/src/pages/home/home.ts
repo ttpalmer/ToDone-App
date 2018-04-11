@@ -14,10 +14,9 @@ import { GoalTasksPage } from "../goal-tasks/goal-tasks";
   templateUrl: 'home.html'
 })
 export class HomePage {
-  goals = []; 
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public dataService: Data, private auth: AuthServiceProvider) {
-   this.goals = this.dataService.getGoals()
+   this.dataService.getGoals()
   }
 
   ionViewDidLoad(){

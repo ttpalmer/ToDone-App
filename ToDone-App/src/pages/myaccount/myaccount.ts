@@ -17,7 +17,7 @@ import firebase from 'firebase';
   selector: 'page-myaccount',
   templateUrl: 'myaccount.html',
 })
-export class MyaccountPage {
+export class MyAccountPage {
   firstName: any;
   lastName: any;
   userName: any;

@@ -33,7 +33,6 @@ export class Data {
 
   }
 
-<<<<<<< Updated upstream
   userInfo(firstName:string, lastName:string): Promise<void>
   {
     var db = firebase.firestore();
@@ -47,29 +46,36 @@ export class Data {
       .catch( (error) => {
         console.error("Error adding document: ", error);
       });
-      var docRef = db.collection("users").doc("first");
+    var docRef = db.collection("users").doc("first");
 
-return docRef.get().then(function(doc) {
+    return docRef.get().then(function(doc) {
     if (doc.exists) {
-        console.log("Document data:", doc.data());
+      console.log("Document data:", doc.data());
     } else {
         // doc.data() will be undefined in this case
         console.log("No such document!");
     }
-}).catch(function(error) {
-    console.log("Error getting document:", error);
-});
+    }).catch(function(error) {
+      console.log("Error getting document:", error);
+    });
   }
 
   
 
-=======
-  getGoals() {
-    var mygoal = null;
-    console.log('getting goals');
-    return mygoal;
-    
-  }
 
->>>>>>> Stashed changes
+  getGoals() {
+    var db = firebase.firestore();
+    console.log("start loading goals");
+    var goalRef = db.collection("Goals").doc("description");
+    return goalRef.get().then(function(doc) {
+      if (doc.exists) {
+        console.log("Document data: ", doc.data());
+      } else {
+        //doc.data() will be undefined in this case
+        console.log("No such document!");
+      }
+    }).catch(function(error) {
+      console.log("Error getting document: ", error);
+    });
+  }
 }

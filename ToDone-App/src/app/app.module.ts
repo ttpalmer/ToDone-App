@@ -1,6 +1,6 @@
 import { MenuPage } from './../pages/menu/menu';
 import { TabsPage } from './../pages/tabs/tabs';
-import { MyaccountPage } from './../pages/myaccount/myaccount';
+import { MyAccountPage } from './../pages/myaccount/myaccount';
 import { AuthServiceProvider } from './../providers/auth-service/auth-service';
 
 import { SignUpPage } from './../pages/sign-up/sign-up';
@@ -40,7 +40,7 @@ const firebaseAuth = {
     LoginPage,
     LaunchPage,
     AddGoalPage,
-    MyaccountPage,
+    MyAccountPage,
     TabsPage,
     MenuPage
   ],
@@ -60,7 +60,7 @@ const firebaseAuth = {
     LoginPage,
     LaunchPage,
     AddGoalPage,
-    MyaccountPage,
+    MyAccountPage,
     TabsPage,
     MenuPage
   ],
