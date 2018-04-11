@@ -4,7 +4,7 @@ import { AuthServiceProvider } from './../providers/auth-service/auth-service';
 import { Data } from './../providers/data/data';
 import { SignUpPage } from './../pages/sign-up/sign-up';
 import { Component } from '@angular/core';
-import { App,Platform } from 'ionic-angular';
+import { App,Platform, Menu } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -16,6 +16,7 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 
 import firebase from 'firebase';
+import { MenuPage } from '../pages/menu/menu';
 
 
 @Component({
@@ -42,7 +43,7 @@ export class MyApp {
         this.rootPage = LaunchPage;
       }
       else{
-        this.rootPage = HomePage;
+        this.rootPage = MenuPage;
         unsubscribe();
       }
     });

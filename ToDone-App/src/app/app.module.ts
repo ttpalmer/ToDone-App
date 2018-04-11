@@ -1,9 +1,12 @@
+import { MenuPage } from './../pages/menu/menu';
+import { TabsPage } from './../pages/tabs/tabs';
+import { MyaccountPage } from './../pages/myaccount/myaccount';
 import { AuthServiceProvider } from './../providers/auth-service/auth-service';
 
 import { SignUpPage } from './../pages/sign-up/sign-up';
 import { BrowserModule } from '@angular/platform-browser';
-import { ErrorHandler, NgModule } from '@angular/core';
-import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
+import { ErrorHandler, NgModule,ViewChild,Component } from '@angular/core';
+import { IonicApp, IonicErrorHandler, IonicModule, Tabs, MenuController,Nav } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 
@@ -16,6 +19,7 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { Data } from '../providers/data/data';
 import { NgxErrorsModule } from '@ultimate/ngxerrors';
+
 
 
 
@@ -35,7 +39,10 @@ const firebaseAuth = {
     SignUpPage,
     LoginPage,
     LaunchPage,
-    AddGoalPage
+    AddGoalPage,
+    MyaccountPage,
+    TabsPage,
+    MenuPage
   ],
   imports: [
     BrowserModule,
@@ -52,7 +59,10 @@ const firebaseAuth = {
     SignUpPage,
     LoginPage,
     LaunchPage,
-    AddGoalPage
+    AddGoalPage,
+    MyaccountPage,
+    TabsPage,
+    MenuPage
   ],
   providers: [
     StatusBar,

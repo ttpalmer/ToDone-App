@@ -4,6 +4,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MenuPage } from '../menu/menu';
 
 
 /**
@@ -72,7 +73,7 @@ export class SignUpPage {
 			password: data.password
 		};
 		this.auth.signUp(credentials).then(
-			() => this.navCtrl.setRoot(HomePage),
+			() => this.navCtrl.setRoot('MenuPage'),
 			error => this.signupError = error.message
 		);
   }

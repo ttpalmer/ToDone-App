@@ -1,6 +1,6 @@
 
 import { Injectable } from '@angular/core';
-
+import firebase from 'firebase';
 
 declare var require: any
 
@@ -32,5 +32,34 @@ export class Data {
     console.log("Firestore connected");
 
   }
+
+  userInfo(firstName:string, lastName:string): Promise<void>
+  {
+    var db = firebase.firestore();
+    db.collection("users").add({
+      first: firstName,
+      last: lastName,
+    })
+      .then( (docRef) => {
+        console.log("Document written with ID: ", docRef.id);
+      })
+      .catch( (error) => {
+        console.error("Error adding document: ", error);
+      });
+      var docRef = db.collection("users").doc("first");
+
+return docRef.get().then(function(doc) {
+    if (doc.exists) {
+        console.log("Document data:", doc.data());
+    } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+    }
+}).catch(function(error) {
+    console.log("Error getting document:", error);
+});
+  }
+
+  
 
 }

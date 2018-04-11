@@ -27,7 +27,8 @@ export class AuthServiceProvider {
   }
 
   getEmail() {
-		return this.user && this.user.email;
+    console.log(firebase.auth().currentUser);
+		return this.user.displayName && this.user.email;
   }
   signOut(): Promise<void>{
     console.log('You have logged out successfully');
@@ -37,7 +38,29 @@ export class AuthServiceProvider {
 
   signUp(credentials) {
     console.log('You have successfully signed up' + " "+ credentials.email + " " + credentials.password);
-		return this.afAuth.auth.createUserWithEmailAndPassword(credentials.email,credentials.password);
-	}
+		return firebase.auth().createUserWithEmailAndPassword(credentials.email,credentials.password).then( newUser => {
+      firebase
+      .database()
+      .ref('/userProfile')
+      .child(newUser.uid)
+      .set({ email: credentials.email });
+    });
+  }
+
+  getDisplayName(userName)
+  {
+    var user = firebase.auth().currentUser;
+
+    user.updateProfile({
+      displayName: userName,
+      photoURL: null
+    }).then(function() {
+      // Update successful.
+    }).catch(function(error) {
+      // An error happened.
+    });
+  }
+  
+
 
 }
