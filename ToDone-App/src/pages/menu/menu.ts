@@ -1,8 +1,10 @@
+import { AddGoalPage } from './../addgoal/addgoal';
 import { TabsPage } from './../tabs/tabs';
 import { HomePage } from './../home/home';
 import { Component,ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, Nav } from 'ionic-angular';
 import { MyaccountPage } from '../myaccount/myaccount';
+
 /**
  * Generated class for the MenuPage page.
  *
@@ -32,7 +34,8 @@ export class MenuPage {
  
   pages: PageInterface[] = [
     { title: 'Home', pageName: 'TabsPage', tabComponent: 'HomePage', index: 0, icon: 'home' },
-    { title: 'Myaccount', pageName: 'TabsPage', tabComponent: 'MyAccountPage', index: 1, icon: 'contacts' },
+    { title: 'My Goals', pageName: 'TabsPage', tabComponent: 'AddGoalPage', index: 1, icon: 'contacts' },
+    { title: 'Myaccount', pageName: 'TabsPage', tabComponent: 'MyAccountPage', index: 2, icon: 'contacts' },
   ];
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
