@@ -12,12 +12,16 @@
         <ion-icon name="close"></ion-icon>
       </button>
     </ion-buttons>
-    <ion-title>New Goal</ion-title>
+    <ion-title>Create A New Goal</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
+  <ion-item>
+    <ion-input type="text" [(ngModel)]="description" placeholder="What's your next goal....?"></ion-input>
+  </ion-item>
+  <button full ion-button color="primaryr" (click)="submitNewGoal()">Submit</button>
 
 </ion-content>
