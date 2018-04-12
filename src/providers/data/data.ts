@@ -1,5 +1,7 @@
 
 import { Injectable } from '@angular/core';
+import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { Observable } from 'rxjs/Observable'
 import firebase from 'firebase';
 
 declare var require: any
@@ -16,24 +18,14 @@ export interface Goals {
 
 @Injectable()
 export class Data {
+
+   goalsCollectionRef: AngularFirestoreCollection<Goals>;
+   goals$: Observable<Goals[]>;
  
 
-  constructor() {
+  constructor(public afs: AngularFirestore) {
 
     console.log('Hello Data Provider');
-    const firebase = require("firebase");
-    //required for side-effects
-    require("firebase/firestore");
-
-    firebase.initializeApp({
-      apiKey: "AIzaSyAENTge-cuAbAXzrrH_ScMnc6j-iJZGgiQ",
-      authDomain: "todone-usc546.firebaseapp.com",
-      projectId: "todone-usc546"
-    });
-
-  // Initialize Cloud Firestore through Firebase
-    var db = firebase.firestore();
-    console.log("Firestore connected");
 
   }
 
@@ -63,10 +55,20 @@ export class Data {
       console.log("Error getting document:", error);
     });
   }
+
+  getGoals() {
+    this.goalsCollectionRef = this.afs.collection('Goals', ref => ref.orderBy('dateCreated'));
+    this.goals$ = this.goalsCollectionRef.valueChanges();
+    console.log("Goals were retrieved");
+
+    return this.goals$;
+  }
+
   addGoalToDatabase(goalDesc: string) {
     var db = firebase.firestore();
     db.collection("Goals").add({
-      description: goalDesc
+      description: goalDesc,
+      dateCreated: new Date()
     })
       .then( (docRef) => {
         console.log("Document written with ID: ", docRef.id);
@@ -74,6 +76,8 @@ export class Data {
       .catch( (error) => {
         console.error("Error adding document: ", error);
       });
+
+      console.log("You created a new goal");
 
   }
 }
