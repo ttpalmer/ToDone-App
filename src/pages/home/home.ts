@@ -1,38 +1,39 @@
 
 import { LaunchPage } from './../launch/launch';
 import { AuthServiceProvider } from './../../providers/auth-service/auth-service';
+import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { Observable } from 'rxjs/Observable'
 import { Component } from '@angular/core';
 import { NavController, NavParams, ModalController } from 'ionic-angular';
 import { AddGoalPage } from "../addgoal/addgoal";
 import { GoalTasksPage } from "../goal-tasks/goal-tasks";
-
-
 import firebase from 'firebase';
+
+export interface Goals {
+  description: string;
+}
 
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
-export class HomePage {
-  goals: any[]; 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, private auth: AuthServiceProvider) {
-    
+export class HomePage {
+  goalsCollectionRef: AngularFirestoreCollection<Goals>;
+  goals$: Observable<Goals[]>;
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, private auth: AuthServiceProvider, private afs: AngularFirestore) {
+    this.goalsCollectionRef = this.afs.collection<Goals>('Goals');
+    this.goals$ = this.goalsCollectionRef.valueChanges();
   }
 
   ionViewDidLoad(){
    console.log('Signed in with email' + " "+ this.auth.getEmail());
+   
   }
   
   addYourGoal() {
-    let addGoal = this.modalCtrl.create(AddGoalPage);
-    addGoal.onDidDismiss((goal) => {
-      if(goal) {
-        //this.saveGoal(goal);
-      }
-    });
-
-    addGoal.present();
+   this.navCtrl.push(AddGoalPage);
 
   }
 

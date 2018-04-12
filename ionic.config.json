@@ -1,6 +1,6 @@
 {
   "name": "ToDone-App",
-  "app_id": "e9309f6c",
+  "app_id": "",
   "type": "ionic-angular",
   "integrations": {
     "cordova": {}

@@ -10,6 +10,10 @@ declare var require: any
   See https://angular.io/guide/dependency-injection for more info on providers
   and Angular DI.
 */
+export interface Goals {
+  description: string;
+}
+
 @Injectable()
 export class Data {
  
@@ -46,20 +50,30 @@ export class Data {
       .catch( (error) => {
         console.error("Error adding document: ", error);
       });
-      var docRef = db.collection("users").doc("first");
+    var docRef = db.collection("users").doc("first");
 
-return docRef.get().then(function(doc) {
+    return docRef.get().then(function(doc) {
     if (doc.exists) {
-        console.log("Document data:", doc.data());
+      console.log("Document data:", doc.data());
     } else {
         // doc.data() will be undefined in this case
         console.log("No such document!");
     }
-}).catch(function(error) {
-    console.log("Error getting document:", error);
-});
+    }).catch(function(error) {
+      console.log("Error getting document:", error);
+    });
   }
+  addGoalToDatabase(goalDesc: string) {
+    var db = firebase.firestore();
+    db.collection("Goals").add({
+      description: goalDesc
+    })
+      .then( (docRef) => {
+        console.log("Document written with ID: ", docRef.id);
+      })
+      .catch( (error) => {
+        console.error("Error adding document: ", error);
+      });
 
-  
-
+  }
 }

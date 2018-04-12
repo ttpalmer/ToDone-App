@@ -1,6 +1,6 @@
 import { MenuPage } from './../pages/menu/menu';
 import { TabsPage } from './../pages/tabs/tabs';
-import { MyaccountPage } from './../pages/myaccount/myaccount';
+import { MyAccountPage } from './../pages/myaccount/myaccount';
 import { AuthServiceProvider } from './../providers/auth-service/auth-service';
 
 import { SignUpPage } from './../pages/sign-up/sign-up';
@@ -17,6 +17,7 @@ import { LaunchPage } from "./../pages/launch/launch";
 import { AddGoalPage } from './../pages/addgoal/addgoal';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
+import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { Data } from '../providers/data/data';
 import { NgxErrorsModule } from '@ultimate/ngxerrors';
 
@@ -40,7 +41,7 @@ const firebaseAuth = {
     LoginPage,
     LaunchPage,
     AddGoalPage,
-    MyaccountPage,
+    MyAccountPage,
     TabsPage,
     MenuPage
   ],
@@ -49,6 +50,7 @@ const firebaseAuth = {
     IonicModule.forRoot(MyApp),
     AngularFireModule.initializeApp(firebaseAuth),
     AngularFireAuthModule,
+    AngularFirestoreModule.enablePersistence(),
     NgxErrorsModule
     
   ],
@@ -60,7 +62,7 @@ const firebaseAuth = {
     LoginPage,
     LaunchPage,
     AddGoalPage,
-    MyaccountPage,
+    MyAccountPage,
     TabsPage,
     MenuPage
   ],

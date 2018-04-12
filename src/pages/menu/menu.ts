@@ -3,7 +3,7 @@ import { TabsPage } from './../tabs/tabs';
 import { HomePage } from './../home/home';
 import { Component,ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, Nav } from 'ionic-angular';
-import { MyaccountPage } from '../myaccount/myaccount';
+import { MyAccountPage } from '../myaccount/myaccount';
 
 /**
  * Generated class for the MenuPage page.
@@ -25,17 +25,17 @@ export interface PageInterface {
   templateUrl: 'menu.html',
 })
 export class MenuPage {
+  
 
   // Basic root for our content view
   rootPage = TabsPage;
  
   // Reference to the app's root nav
-  @ViewChild(Nav) nav: Nav;
+  /*@ViewChild(Nav) nav: Nav;
  
   pages: PageInterface[] = [
     { title: 'Home', pageName: 'TabsPage', tabComponent: 'HomePage', index: 0, icon: 'home' },
-    { title: 'My Goals', pageName: 'TabsPage', tabComponent: 'AddGoalPage', index: 1, icon: 'contacts' },
-    { title: 'Myaccount', pageName: 'TabsPage', tabComponent: 'MyAccountPage', index: 2, icon: 'contacts' },
+    { title: 'MyAccount', pageName: 'TabsPage', tabComponent: 'MyAccountPage', index: 1, icon: 'contacts' },
   ];
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
@@ -79,6 +79,6 @@ export class MenuPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad MenuPage');
-  }
+  }*/
 
 }
