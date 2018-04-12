@@ -19,9 +19,17 @@
 
 
 <ion-content padding>
-  <ion-item>
-    <ion-input type="text" [(ngModel)]="description" placeholder="What's your next goal....?"></ion-input>
-  </ion-item>
-  <button full ion-button color="primaryr" (click)="submitNewGoal()">Submit</button>
+  <ion-card>
+  
+  
+    <ion-card-content>
+      <ion-item>
+        <ion-input type="text" [(ngModel)]="description" placeholder="What's your next goal....?"></ion-input>
+      </ion-item>
+    </ion-card-content>
+  
+  </ion-card>
+
+  <button full ion-button color="primary" (click)="submitNewGoal()">Submit</button>
 
 </ion-content>

@@ -16,7 +16,7 @@ import { Data } from './../../providers/data/data';
 })
 export class AddGoalPage {
 
-  description: string;
+  description: string = "";
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public dataService: Data, public view: ViewController) {
   }
