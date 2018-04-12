@@ -1,0 +1,27 @@
+
+<ion-header>
+
+  <ion-navbar color="primary">
+      <ion-buttons start>
+      <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    </ion-buttons>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="closeAddGoal()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>Create A New Goal</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-item>
+    <ion-input type="text" [(ngModel)]="description" placeholder="What's your next goal....?"></ion-input>
+  </ion-item>
+  <button full ion-button color="primaryr" (click)="submitNewGoal()">Submit</button>
+
+</ion-content>
