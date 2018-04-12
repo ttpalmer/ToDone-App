@@ -34,7 +34,7 @@ export class HomePage {
 
   }
 
-  viewGoal(goal) {
+  viewGoalDetails(goal) {
     this.navCtrl.push(GoalTasksPage, {
       goal: goal
     });

@@ -15,6 +15,7 @@ import { HomePage } from '../pages/home/home';
 import { LoginPage } from './../pages/login/login';
 import { LaunchPage } from "./../pages/launch/launch";
 import { AddGoalPage } from './../pages/addgoal/addgoal';
+import { GoalTasksPage } from './../pages/goal-tasks/goal-tasks';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
@@ -43,7 +44,8 @@ const firebaseAuth = {
     AddGoalPage,
     MyAccountPage,
     TabsPage,
-    MenuPage
+    MenuPage,
+    GoalTasksPage
   ],
   imports: [
     BrowserModule,
@@ -64,7 +66,8 @@ const firebaseAuth = {
     AddGoalPage,
     MyAccountPage,
     TabsPage,
-    MenuPage
+    MenuPage,
+    GoalTasksPage
   ],
   providers: [
     StatusBar,
