@@ -16,12 +16,24 @@ import firebase from 'firebase';
 })
 
 export class HomePage {
-  goals: Goals[];
+  // goals: Goals[];
+  goals=[];
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private auth: AuthServiceProvider, public dataService: Data) {
-    this.dataService.getGoals().subscribe(goals$ => {
-      this.goals = goals$;
+      var db = firebase.firestore();
+      var self=this;
+    db.collection("Goals").get().then(function(querySnapshot) {
+    querySnapshot.forEach(function(doc) {
+        // doc.data() is never undefined for query doc snapshots
+        console.log(doc.id, " => ", doc.data());
+        self.goals.push({goalID:doc.id,description:doc.get("description")});
     });
+});
+
+
+    // this.dataService.getGoals().subscribe(goals$ => {
+    //   this.goals = goals$;
+    // });
   }
 
   ionViewDidLoad(){
@@ -35,8 +47,9 @@ export class HomePage {
   }
 
   viewGoalDetails(goal) {
+    console.log(goal);
     this.navCtrl.push(GoalTasksPage, {
-      goal: goal
+      goalID: goal.goalID
     });
   }
 

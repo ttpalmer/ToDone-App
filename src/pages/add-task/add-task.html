@@ -1,0 +1,45 @@
+<ion-header>
+
+  <ion-navbar color="primary">
+      <ion-buttons start>
+      <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    </ion-buttons>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="closeAddTask()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>Create A New Task</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-card>
+  
+  
+    <ion-card-content>
+      <ion-item>
+        <ion-input type="text" [(ngModel)]="description" placeholder="What's your next Task....?"></ion-input>
+      </ion-item>
+    </ion-card-content>
+  
+  </ion-card>
+
+  <ion-card>
+  
+  
+    <ion-card-content>
+      <ion-item>
+        <ion-input type="text" [(ngModel)]="priority" placeholder="What's the task priority....?"></ion-input>
+      </ion-item>
+    </ion-card-content>
+  
+  </ion-card>
+
+  <button full ion-button color="primary" (click)="submitNewTask()">Submit</button>
+
+</ion-content>

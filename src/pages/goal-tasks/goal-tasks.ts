@@ -1,25 +1,47 @@
+import { LaunchPage } from './../launch/launch';
+import { AuthServiceProvider } from './../../providers/auth-service/auth-service';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, ModalController, ViewController } from 'ionic-angular';
+import { Data } from './../../providers/data/data';
+import { Tasks } from './../../providers/data/data';
+import { AddGoalPage } from "../addgoal/addgoal";
+import { HomePage } from "../home/home";
+import { AddTaskPage } from '../add-task/add-task';
+import firebase from 'firebase';
 
-/**
- * Generated class for the GoalTasksPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
-@IonicPage()
 @Component({
   selector: 'page-goal-tasks',
-  templateUrl: 'goal-tasks.html',
+  templateUrl: 'goal-tasks.html'
 })
-export class GoalTasksPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+export class GoalTasksPage {
+  tasks: any;
+  goalID:string;
+  constructor(public navCtrl: NavController, public navParams: NavParams, private auth: AuthServiceProvider, public dataService: Data, public view: ViewController) {
+    this.goalID = navParams.get("goalID");
+    this.dataService.getTasks(this.goalID).subscribe(tasks$ => {
+      this.tasks = tasks$;
+    });
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad GoalTasksPage');
+  ionViewDidLoad(){
+   
+  }
+  
+  ionViewDidEnter(){
+    this.dataService.getTasks(this.goalID).subscribe(tasks$ => {
+      this.tasks = tasks$;
+    });    
+  }
+
+
+  addYourTask(){
+    this.navCtrl.push(AddTaskPage,{goalID:this.goalID});
+  }
+
+  toggleItem(item): void {
+    this.tasks.toggleItem(item);
   }
 
 }

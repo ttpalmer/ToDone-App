@@ -35,7 +35,7 @@
     "zone.js": "0.8.20"
   },
   "devDependencies": {
-    "@ionic/app-scripts": "3.1.8",
+    "@ionic/app-scripts": "^3.1.8",
     "@types/node": "^7.0.60",
     "fs-extra": "^5.0.0",
     "grunt-cache-bust": "^1.6.0",

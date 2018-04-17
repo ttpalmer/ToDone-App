@@ -16,14 +16,12 @@ import { LoginPage } from './../pages/login/login';
 import { LaunchPage } from "./../pages/launch/launch";
 import { AddGoalPage } from './../pages/addgoal/addgoal';
 import { GoalTasksPage } from './../pages/goal-tasks/goal-tasks';
+import { AddTaskPage } from './../pages/add-task/add-task';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { Data } from '../providers/data/data';
 import { NgxErrorsModule } from '@ultimate/ngxerrors';
-
-
-
 
 const firebaseAuth = {
   apiKey: "AIzaSyAENTge-cuAbAXzrrH_ScMnc6j-iJZGgiQ",
@@ -45,7 +43,8 @@ const firebaseAuth = {
     MyAccountPage,
     TabsPage,
     MenuPage,
-    GoalTasksPage
+    GoalTasksPage,
+    AddTaskPage
   ],
   imports: [
     BrowserModule,
@@ -67,7 +66,8 @@ const firebaseAuth = {
     MyAccountPage,
     TabsPage,
     MenuPage,
-    GoalTasksPage
+    GoalTasksPage,
+    AddTaskPage
   ],
   providers: [
     StatusBar,
