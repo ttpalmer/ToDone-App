@@ -73,7 +73,7 @@ export class SignUpPage {
 			password: data.password
 		};
 		this.auth.signUp(credentials).then(
-			() => this.navCtrl.setRoot('MenuPage'),
+			() => this.navCtrl.setRoot(HomePage),
 			error => this.signupError = error.message
 		);
   }

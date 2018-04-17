@@ -69,7 +69,7 @@ export class GoalTasksPage {
 
  toggleItem(item): void {
    item = this.tasks;
-    this.tasks.toggleItem(item);
+  //  this.tasks.toggleItem(item);
   }
 
 }

@@ -4,7 +4,6 @@ import { AuthServiceProvider } from './../../providers/auth-service/auth-service
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { HomePage } from '../home/home';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 
 /**
