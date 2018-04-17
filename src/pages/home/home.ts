@@ -28,9 +28,9 @@ export class HomePage {
     this.afAuth.authState.subscribe(user =>{
       if(user) this.userID = user.uid
       console.log('This users ID is: ' + this.userID);
-  /*    var db = firebase.firestore();
+      var db = firebase.firestore();
       var self=this;
-       db.collection("Goals").where("key", "==", this.userID).get()
+       db.collection("Goals").orderBy("dateCreated").where("key", "==", this.userID).get()
       .then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
             // doc.data() is never undefined for query doc snapshots
@@ -40,14 +40,14 @@ export class HomePage {
     })
     .catch(function(error) {
         console.log("Error getting documents: ", error);
-    });*/
+    });
       
 });
   }
 
   ionViewDidLoad(){
    console.log('Signed in with email' + " "+ this.auth.getEmail());
-   var db = firebase.firestore();
+  /* var db = firebase.firestore();
    var self=this;
     db.collection("Goals").where("key", "==", this.userID).get()
    .then(function(querySnapshot) {
@@ -59,12 +59,12 @@ export class HomePage {
  })
  .catch(function(error) {
      console.log("Error getting documents: ", error);
- });
+ });*/
    
    
   }
   
-  ionViewWillEnter(){
+  ionViewDidEnter(){
     console.log('The view has been refreshed new goals should be displayeed');
    this.updateGoals();
   }
@@ -91,12 +91,14 @@ export class HomePage {
     var db = firebase.firestore();
     var self=this;
     
-     db.collection("Goals").where("key", "==", this.userID).get()
+     db.collection("Goals").orderBy("dateCreated").where("key", "==", this.userID).get()
     .then(function(querySnapshot) {
+      //Set goals array to zero to add new goals
+      self.goals =[];
       querySnapshot.forEach(function(doc) {
           // doc.data() is never undefined for query doc snapshots
           console.log(doc.id, " => ", doc.data());
-          if(doc.id != doc.id)
+        //  if(doc.id != doc.id)
             self.goals.push({goalID:doc.id, description: doc.get("description")});
       });
   })

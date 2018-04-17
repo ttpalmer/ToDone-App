@@ -44,8 +44,8 @@ export class Data {
     this.afAuth.authState.subscribe(user =>{
       if(user) this.userID = user.uid
       console.log('This users ID is: ' + this.userID);
-    })
-    this.goalsCollectionRef = this.afs.collection('Goals', ref => ref.orderBy('dateCreated'));
+   
+    this.goalsCollectionRef = this.afs.collection('Goals', ref => ref.orderBy('dateCreated').where("key", "==", user.uid));
     this.goals$ = this.goalsCollectionRef.snapshotChanges().map(changes => {
       return changes.map( a => {
         const data = a.payload.doc.data() as Goals;
@@ -63,7 +63,7 @@ export class Data {
         return data;
       });
     });
-
+ });
     console.log('Hello Data Provider');
 
   }
@@ -115,7 +115,7 @@ export class Data {
       var db = firebase.firestore();
       
       var self=this;
-       db.collection("Goals").where("key", "==", this.userID).get()
+       db.collection("Goals").where("key", "==", this.userID).orderBy('dateCreated').get()
       .then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
             // doc.data() is never undefined for query doc snapshots

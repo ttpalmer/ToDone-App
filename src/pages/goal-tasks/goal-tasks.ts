@@ -35,7 +35,7 @@ export class GoalTasksPage {
       console.log('This users ID is: ' + this.userID);
     var db = firebase.firestore();
       var self=this;
-       db.collection("Tasks").where("goalID", "==", this.goalID).get()
+       db.collection("Tasks").orderBy("priority").where("goalID", "==", this.goalID).get()
       .then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
             // doc.data() is never undefined for query doc snapshots
@@ -56,7 +56,8 @@ export class GoalTasksPage {
   }
   
   ionViewWillEnter(){
-    this.dataService.getTasks(this.goalID);
+    console.log('New tasks have been retrieved' + this.dataService.getTasks(this.goalID));
+    this.updateTasks();
   }
 
 
@@ -70,6 +71,27 @@ export class GoalTasksPage {
  toggleItem(item): void {
    item = this.tasks;
   //  this.tasks.toggleItem(item);
+  }
+
+  updateTasks(){
+    var db = firebase.firestore();
+      var self=this;
+       db.collection("Tasks").orderBy("priority").where("goalID", "==", this.goalID).get()
+      .then(function(querySnapshot) {
+        //Set tasks array set to zero to update with new task
+        self.tasks =[];
+        querySnapshot.forEach(function(doc) {
+            // doc.data() is never undefined for query doc snapshots
+            console.log(doc.id, " => ", doc.data());
+            self.tasks.push({ goalID:doc.id, description:doc.get("description"), priority: doc.get("priority")});
+            console.log("Tasks have been pushed!!")
+          
+        });
+    })
+    .catch(function(error) {
+        console.log("Error getting documents: ", error);
+    });
+
   }
 
 }
