@@ -102,11 +102,31 @@ export class Data {
 
       console.log("The user of these goals is: " + this.userID);
 
-    this.goalsCollectionRef = this.afs.collection('Goals', ref => ref.orderBy('dateCreated'));
-    this.goals$ = this.goalsCollectionRef.valueChanges();
-    console.log("Goals were retrieved");
-    console.log(this.goals$);
-    return this.goals$;
+     /* this.goalsCollectionRef = this.afs.collection('Goals', ref => ref.orderBy('dateCreated'));
+      this.goals$ = this.goalsCollectionRef.snapshotChanges().map(changes => {
+        return changes.map( a => {
+          const data = a.payload.doc.data() as Goals;
+          data.key = a.payload.doc.id;
+          console.log('Goals have been retrieved ' + data);
+          return data;
+        });
+  
+      });*/
+      var db = firebase.firestore();
+      
+      var self=this;
+       db.collection("Goals").where("key", "==", this.userID).get()
+      .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+            // doc.data() is never undefined for query doc snapshots
+            console.log(doc.id, " => ", doc.data());
+          // self.goals$.push({goalID:doc.id, description: doc.get("description")});
+           self.goals$.subscribe(data => {doc.data()});
+        });
+    })
+    .catch(function(error) {
+        console.log("Error getting documents: ", error);
+    });
   }
 
   addGoal(goal){

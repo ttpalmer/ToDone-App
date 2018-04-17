@@ -55,8 +55,8 @@ export class GoalTasksPage {
    
   }
   
-  ionViewDidEnter(){
- 
+  ionViewWillEnter(){
+    this.dataService.getTasks(this.goalID);
   }
 
 

@@ -34,7 +34,8 @@ export class AddGoalPage {
   submitNewGoal() {
     if(this.description.length > 0) {
       this.dataService.addGoalToDatabase(this.description, "");
-      this.view.dismiss();
+      //this.view.dismiss();
+      this.navCtrl.pop();
     }
     else {
       console.log("You haven't typed anything")

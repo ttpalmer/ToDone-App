@@ -28,7 +28,7 @@ export class HomePage {
     this.afAuth.authState.subscribe(user =>{
       if(user) this.userID = user.uid
       console.log('This users ID is: ' + this.userID);
-      var db = firebase.firestore();
+  /*    var db = firebase.firestore();
       var self=this;
        db.collection("Goals").where("key", "==", this.userID).get()
       .then(function(querySnapshot) {
@@ -40,17 +40,34 @@ export class HomePage {
     })
     .catch(function(error) {
         console.log("Error getting documents: ", error);
-    });
+    });*/
       
 });
   }
 
   ionViewDidLoad(){
    console.log('Signed in with email' + " "+ this.auth.getEmail());
-   this.dataService.getTas
+   var db = firebase.firestore();
+   var self=this;
+    db.collection("Goals").where("key", "==", this.userID).get()
+   .then(function(querySnapshot) {
+     querySnapshot.forEach(function(doc) {
+         // doc.data() is never undefined for query doc snapshots
+         console.log(doc.id, " => ", doc.data());
+         self.goals.push({goalID:doc.id, description: doc.get("description")});
+     });
+ })
+ .catch(function(error) {
+     console.log("Error getting documents: ", error);
+ });
+   
    
   }
   
+  ionViewWillEnter(){
+    console.log('The view has been refreshed new goals should be displayeed');
+   this.updateGoals();
+  }
   addYourGoal() {
    this.navCtrl.push(AddGoalPage);
 
@@ -67,5 +84,24 @@ export class HomePage {
   {
     this.auth.signOut();
     this.navCtrl.setRoot(LaunchPage);
+  }
+
+  updateGoals()
+  {
+    var db = firebase.firestore();
+    var self=this;
+    
+     db.collection("Goals").where("key", "==", this.userID).get()
+    .then(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+          // doc.data() is never undefined for query doc snapshots
+          console.log(doc.id, " => ", doc.data());
+          if(doc.id != doc.id)
+            self.goals.push({goalID:doc.id, description: doc.get("description")});
+      });
+  })
+  .catch(function(error) {
+      console.log("Error getting documents: ", error);
+  });
   }
 }
