@@ -1,6 +1,8 @@
+import { Goals } from './../../goal';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { Data } from './../../providers/data/data';
+
 
 /**
  * Generated class for the AddgoalPage page.
@@ -18,6 +20,8 @@ export class AddGoalPage {
 
   description: string = "";
 
+  model = { description: ''}
+
   constructor(public navCtrl: NavController, public navParams: NavParams, public dataService: Data, public view: ViewController) {
   }
 
@@ -25,9 +29,11 @@ export class AddGoalPage {
     console.log('ionViewDidLoad AddGoalPage');
   }
 
+
+
   submitNewGoal() {
     if(this.description.length > 0) {
-      this.dataService.addGoalToDatabase(this.description);
+      this.dataService.addGoalToDatabase(this.description, "");
       this.view.dismiss();
     }
     else {

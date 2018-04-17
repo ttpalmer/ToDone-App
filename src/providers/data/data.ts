@@ -1,7 +1,9 @@
-
+import { Tasks } from './../../task';
+import { Goals } from '../../goal';
+import { AngularFireAuth } from 'angularfire2/auth';
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
-import { Observable } from 'rxjs/Observable'
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument, fromDocRef } from 'angularfire2/firestore';
+import { Observable } from 'rxjs/Observable';
 import firebase from 'firebase';
 
 declare var require: any
@@ -12,23 +14,55 @@ declare var require: any
   See https://angular.io/guide/dependency-injection for more info on providers
   and Angular DI.
 */
-export interface Goals {
+/*export interface Goals {
+  key: String;
   description: string;
 }
 export interface Tasks{
   description: string;
-}
+}*/
 
 @Injectable()
 export class Data {
 
    goalsCollectionRef: AngularFirestoreCollection<Goals>;
    goals$: Observable<Goals[]>;
+   goalsDoc: AngularFirestoreDocument<Goals>;
+
    tasksCollectionRef: AngularFirestoreCollection<Tasks>;
    tasks$: Observable<Tasks[]>;
+   tasksDoc: AngularFirestoreDocument<Tasks>;
+
+
+
+   userID: String;
+
+   goalKey: String;
  
 
-  constructor(public afs: AngularFirestore) {
+  constructor(public afs: AngularFirestore, private afAuth : AngularFireAuth) {
+    this.afAuth.authState.subscribe(user =>{
+      if(user) this.userID = user.uid
+      console.log('This users ID is: ' + this.userID);
+    })
+    this.goalsCollectionRef = this.afs.collection('Goals', ref => ref.orderBy('dateCreated'));
+    this.goals$ = this.goalsCollectionRef.snapshotChanges().map(changes => {
+      return changes.map( a => {
+        const data = a.payload.doc.data() as Goals;
+        data.key = a.payload.doc.id;
+        return data;
+      });
+      
+
+    });
+    this.tasksCollectionRef = this.afs.collection('Tasks', ref => ref.orderBy('priority'));
+    this.tasks$ = this.tasksCollectionRef.snapshotChanges().map(changes => {
+      return changes.map( a => {
+        const data = a.payload.doc.data() as Tasks;
+      //  data.goalID = a.payload.doc.id;
+        return data;
+      });
+    });
 
     console.log('Hello Data Provider');
 
@@ -60,25 +94,40 @@ export class Data {
       console.log("Error getting document:", error);
     });
   }
-  
+
 
   getGoals() {
+    if(!this.userID)
+      return;
+
+      console.log("The user of these goals is: " + this.userID);
+
     this.goalsCollectionRef = this.afs.collection('Goals', ref => ref.orderBy('dateCreated'));
     this.goals$ = this.goalsCollectionRef.valueChanges();
     console.log("Goals were retrieved");
     console.log(this.goals$);
     return this.goals$;
+  }
 
-
-
-
-
+  addGoal(goal){
+    this.goalsCollectionRef.add(goal);
+  }
+  getUsersGoals()
+  {
+   return this.goals$; 
   }
  
   getTasks(goalID:string) {
-    console.log(goalID);
+     console.log(goalID);
+     if(!this.userID)
+       return;
+       this.tasksCollectionRef = this.afs.collection('Tasks');
+       this.tasks$ = this.tasksCollectionRef.valueChanges();
+       console.log("Tasks were retrieved");
+       console.log(this.tasks$);
+       return this.tasks$;
 
-    var db = firebase.firestore();
+   /* var db = firebase.firestore();
     var self=this;
     db.collection("Tasks").get().then(function(querySnapshot) {
     var tasks=[];
@@ -101,24 +150,26 @@ export class Data {
 //   snapshot.forEach(function(data) {
 //     console.log("The " + data.key + " score is " + data.val());
 //   });
-// });
+// });*/
 
 
   }
 
-  addGoalToDatabase(goalDesc: string) {
-    var db = firebase.firestore();
-    db.collection("Goals").add({
-      description: goalDesc,
-      dateCreated: new Date()
-    })
-      .then( (docRef) => {
-        console.log("Document written with ID: ", docRef.id);
-      })
-      .catch( (error) => {
-        console.error("Error adding document: ", error);
-      });
+  addGoalToDatabase(goalDesc: string, key: String ) {
+   
+    if(!this.userID)
+      return;
 
+    var db = firebase.firestore();
+    var newGoal = db.collection("Goals");
+    var newGoalDoc = newGoal.doc();
+     var goal = {
+        description: goalDesc,
+        dateCreated: new Date(),
+        key: this.userID
+      };
+    newGoalDoc.set(goal);
+    console.log("Document written with ID: "+ key);
       console.log("You created a new goal");
 
   }
@@ -126,12 +177,27 @@ export class Data {
 
 //TODO add priority as int and goal id
   addTaskToDatabase(taskDesc: string,priority:number,goalID:string /*int taskPriority, Goal ID?? */) {
+
+    if(!this.userID)
+      return;
+
     console.log(goalID);
-
     var db = firebase.firestore();
+    var newTask = db.collection("Tasks");
+    var newTaskDoc = newTask.doc();
 
+    var task = {
+      description: taskDesc,
+      priority: priority,
+      goalID: goalID,
+      checked:0
+    }
+    newTaskDoc.set(task);
+    console.log("Document written with ID: "+ newTaskDoc.id);
+      console.log("You created a new task");
     
-    db.collection("Tasks").add({
+    
+    /*db.collection("Tasks").add({
       description: taskDesc,
       priority: priority,
       goalID: goalID,
@@ -145,7 +211,7 @@ export class Data {
         console.error("Error adding document: ", error);
       });
 
-      console.log("You created a new task");
+      console.log("You created a new task");*/
 
   }
 

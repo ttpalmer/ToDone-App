@@ -1,10 +1,10 @@
-
+import { AngularFireAuth } from 'angularfire2/auth';
 import { LaunchPage } from './../launch/launch';
 import { AuthServiceProvider } from './../../providers/auth-service/auth-service';
 import { Component } from '@angular/core';
 import { NavController, NavParams, ModalController } from 'ionic-angular';
 import { Data } from './../../providers/data/data';
-import { Goals } from './../../providers/data/data';
+
 import { AddGoalPage } from "../addgoal/addgoal";
 import { GoalTasksPage } from "../goal-tasks/goal-tasks";
 import firebase from 'firebase';
@@ -15,29 +15,39 @@ import firebase from 'firebase';
   templateUrl: 'home.html'
 })
 
+//TODO 
+//        WORK ON MAKING GOALS AUTO RELOAD
+
 export class HomePage {
-  // goals: Goals[];
+
   goals=[];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private auth: AuthServiceProvider, public dataService: Data) {
+  userID: String;
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, private auth: AuthServiceProvider, public dataService: Data, private afAuth : AngularFireAuth) {
+    this.afAuth.authState.subscribe(user =>{
+      if(user) this.userID = user.uid
+      console.log('This users ID is: ' + this.userID);
       var db = firebase.firestore();
       var self=this;
-    db.collection("Goals").get().then(function(querySnapshot) {
-    querySnapshot.forEach(function(doc) {
-        // doc.data() is never undefined for query doc snapshots
-        console.log(doc.id, " => ", doc.data());
-        self.goals.push({goalID:doc.id,description:doc.get("description")});
+       db.collection("Goals").where("key", "==", this.userID).get()
+      .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+            // doc.data() is never undefined for query doc snapshots
+            console.log(doc.id, " => ", doc.data());
+            self.goals.push({goalID:doc.id, description: doc.get("description")});
+        });
+    })
+    .catch(function(error) {
+        console.log("Error getting documents: ", error);
     });
+      
 });
-
-
-    // this.dataService.getGoals().subscribe(goals$ => {
-    //   this.goals = goals$;
-    // });
   }
 
   ionViewDidLoad(){
    console.log('Signed in with email' + " "+ this.auth.getEmail());
+   this.dataService.getTas
    
   }
   

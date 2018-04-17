@@ -23,8 +23,7 @@ export class AddTaskPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public dataService: Data, public view: ViewController) {
   	this.goalID = navParams.get("goalID");
-  	// this.priority=navParams.get("priority");
-  	// this.description=navParams.get("description");
+  
   }
 
   ionViewDidLoad() {
@@ -35,7 +34,7 @@ export class AddTaskPage {
     if(this.description.length > 0) {
     	console.log(this.goalID);
       this.dataService.addTaskToDatabase(this.description,this.priority,this.goalID);
-      //this.dataService.addTaskToDatabase(this.priority);
+     
 
       this.view.dismiss();
     }

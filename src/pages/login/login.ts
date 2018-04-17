@@ -1,3 +1,4 @@
+import { HomePage } from './../home/home';
 import { MenuPage } from './../menu/menu';
 import { AuthServiceProvider } from './../../providers/auth-service/auth-service';
 import { Component } from '@angular/core';
@@ -67,7 +68,7 @@ export class LoginPage {
 		};
 		this.auth.signInWithEmail(credentials)
 			.then(
-				() => this.navCtrl.setRoot('MenuPage'),
+				() => this.navCtrl.setRoot(HomePage),
 				error => this.loginError = error.message
 			);
     }

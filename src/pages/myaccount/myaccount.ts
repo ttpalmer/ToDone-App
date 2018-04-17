@@ -12,6 +12,8 @@ import firebase from 'firebase';
  * Ionic pages and navigation.
  */
 
+ //TODO
+ //        CHANGE TO MY ACCOUNT AND ADD EDIT MY ACCOUNT PAGE TO ADD THIS DATA 
 @IonicPage()
 @Component({
   selector: 'page-myaccount',

@@ -1,3 +1,4 @@
+import { HomePage } from './../pages/home/home';
 import { LaunchPage } from './../pages/launch/launch';
 import { LoginPage } from './../pages/login/login';
 import { AuthServiceProvider } from './../providers/auth-service/auth-service';
@@ -43,7 +44,7 @@ export class MyApp {
         this.rootPage = LaunchPage;
       }
       else{
-        this.rootPage = MenuPage;
+        this.rootPage = HomePage;
         unsubscribe();
       }
     });

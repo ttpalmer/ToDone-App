@@ -25,11 +25,11 @@
 <ion-content padding>
   <ion-list>
     <ion-item *ngFor="let task of tasks">
-      <ion-item>
+      <!-- TODO for some reason it toggles but not without giving an error first -->
       	<ion-label> {{task.description}}</ion-label>
-      	<ion-checkbox [checked] = "item.checked" (click)="toggleItem(item)">
+      	<ion-checkbox [checked] = "task.checked" (click)="toggleItem(task)">
       	</ion-checkbox>
-      </ion-item>
+      
     </ion-item>
   </ion-list>
 </ion-content>
