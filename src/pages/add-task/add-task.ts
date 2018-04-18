@@ -20,6 +20,7 @@ export class AddTaskPage {
   priority:number =0;
   //priority
   goalID:string;
+  checked: boolean
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public dataService: Data, public view: ViewController) {
   	this.goalID = navParams.get("goalID");
@@ -32,8 +33,9 @@ export class AddTaskPage {
 
   submitNewTask() {
     if(this.description.length > 0) {
-    	console.log(this.goalID);
-      this.dataService.addTaskToDatabase(this.description,this.priority,this.goalID);
+      console.log(this.goalID);
+      //this.checked = false;
+      this.dataService.addTaskToDatabase(this.description,this.priority,this.goalID,this.checked);
      
 
       this.view.dismiss();

@@ -2,12 +2,13 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { LaunchPage } from './../launch/launch';
 import { AuthServiceProvider } from './../../providers/auth-service/auth-service';
 import { Component } from '@angular/core';
-import { NavController, NavParams, ModalController } from 'ionic-angular';
+import { NavController, NavParams, ModalController, Events } from 'ionic-angular';
 import { Data } from './../../providers/data/data';
 
 import { AddGoalPage } from "../addgoal/addgoal";
 import { GoalTasksPage } from "../goal-tasks/goal-tasks";
 import firebase from 'firebase';
+
 
 
 @Component({
@@ -106,4 +107,19 @@ export class HomePage {
       console.log("Error getting documents: ", error);
   });
   }
+  removeGoal(goal,ev)
+  {
+    var db = firebase.firestore();
+    db.collection("Goals").doc(goal.goalID).delete().then(function()
+  {
+    console.log("Document successfully deleted!! " + goal.description);
+  }).catch(function (error)
+  {
+    console.error("Error removing document: ", error);
+  });
+  ev.stopPropagation();
+  this.updateGoals();
+
+  }
+
 }

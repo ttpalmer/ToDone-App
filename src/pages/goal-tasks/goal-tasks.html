@@ -24,13 +24,22 @@
 
 <ion-content padding>
   <ion-list>
-    <ion-item *ngFor="let task of tasks">
+    <ion-item-sliding *ngFor="let task of tasks">
+    <ion-item >
       <!-- TODO for some reason it toggles but not without giving an error first -->
-      	<ion-label> {{task.description}}</ion-label>
-      	<ion-checkbox [checked] = "task.checked" (click)="toggleItem(task)">
+      	<ion-label> {{task.description}}  <button style="float: right;" >{{task.priority}}</button>    </ion-label>
+      	<ion-checkbox [ngModel] = "task.checked" (click)="isChecked()">
       	</ion-checkbox>
-      
+      <p> {{task.percent}} </p>
     </ion-item>
+    <ion-item-options>
+        <button danger (click)="removeTask(task)"><ion-icon name ="trash"></ion-icon></button>
+      </ion-item-options>
+       
+    </ion-item-sliding>
+   
   </ion-list>
+  <button (click) = "showAllTasks()"> Show more </button>
+
 </ion-content>
 

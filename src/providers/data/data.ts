@@ -196,7 +196,7 @@ export class Data {
 
 
 //TODO add priority as int and goal id
-  addTaskToDatabase(taskDesc: string,priority:number,goalID:string /*int taskPriority, Goal ID?? */) {
+  addTaskToDatabase(taskDesc: string,priority:number,goalID:string,checked: boolean /*int taskPriority, Goal ID?? */) {
 
     if(!this.userID)
       return;
@@ -210,7 +210,7 @@ export class Data {
       description: taskDesc,
       priority: priority,
       goalID: goalID,
-      checked:0
+      checked:false
     }
     newTaskDoc.set(task);
     console.log("Document written with ID: "+ newTaskDoc.id);

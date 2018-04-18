@@ -23,6 +23,9 @@ export class GoalTasksPage {
   goalID:string;
 
   description: string;
+  checkedTasks: any;
+checked: boolean;
+  percent: number;
 
   //TODO 
   //          WORK ON MAKING TASKS AUTO RELOAD
@@ -35,7 +38,7 @@ export class GoalTasksPage {
       console.log('This users ID is: ' + this.userID);
     var db = firebase.firestore();
       var self=this;
-       db.collection("Tasks").orderBy("priority").where("goalID", "==", this.goalID).get()
+       db.collection("Tasks").orderBy("priority").where("goalID", "==", this.goalID).limit(3).get()
       .then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
             // doc.data() is never undefined for query doc snapshots
@@ -76,7 +79,7 @@ export class GoalTasksPage {
   updateTasks(){
     var db = firebase.firestore();
       var self=this;
-       db.collection("Tasks").orderBy("priority").where("goalID", "==", this.goalID).get()
+       db.collection("Tasks").orderBy("priority").where("goalID", "==", this.goalID).limit(3).get()
       .then(function(querySnapshot) {
         //Set tasks array set to zero to update with new task
         self.tasks =[];
@@ -93,5 +96,51 @@ export class GoalTasksPage {
     });
 
   }
+  removeTask(task)
+  {
+    var db = firebase.firestore();
+    db.collection("Tasks").doc(task.goalID).delete().then(function()
+  {
+    console.log("Document successfully deleted!! " + task.description);
+  }).catch(function (error)
+  {
+    console.error("Error removing document: ", error);
+  });
+  this.updateTasks();
+}
+
+isChecked()
+{
+   this.checked = false;
+  let count = 0;
+    this.tasks.forEach(task => {
+			if(task.checked){
+        count++;
+        console.log(count);
+			}
+		})
+		return count;
+  
+}
+showAllTasks() : void
+{
+  var db = firebase.firestore();
+  var self=this;
+   db.collection("Tasks").orderBy("priority").where("goalID", "==", this.goalID).get()
+  .then(function(querySnapshot) {
+    //Set tasks array set to zero to update with new task
+    self.tasks =[];
+    querySnapshot.forEach(function(doc) {
+        // doc.data() is never undefined for query doc snapshots
+        console.log(doc.id, " => ", doc.data());
+        self.tasks.push({ goalID:doc.id, description:doc.get("description"), priority: doc.get("priority")});
+        console.log("Tasks have been pushed!!")
+      
+    });
+})
+.catch(function(error) {
+    console.log("Error getting documents: ", error);
+});
+}
 
 }
