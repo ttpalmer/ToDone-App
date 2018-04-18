@@ -38,7 +38,7 @@ checked: boolean;
       console.log('This users ID is: ' + this.userID);
     var db = firebase.firestore();
       var self=this;
-       db.collection("Tasks").orderBy("priority").where("goalID", "==", this.goalID).limit(3).get()
+       db.collection("Tasks").orderBy("priority").where("goalID", "==", this.goalID).limit(1).get()
       .then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
             // doc.data() is never undefined for query doc snapshots
@@ -79,7 +79,7 @@ checked: boolean;
   updateTasks(){
     var db = firebase.firestore();
       var self=this;
-       db.collection("Tasks").orderBy("priority").where("goalID", "==", this.goalID).limit(3).get()
+       db.collection("Tasks").orderBy("priority").where("goalID", "==", this.goalID).limit(1).get()
       .then(function(querySnapshot) {
         //Set tasks array set to zero to update with new task
         self.tasks =[];
