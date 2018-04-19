@@ -34,7 +34,6 @@ export class AddTaskPage {
   submitNewTask() {
     if(this.description.length > 0) {
       console.log(this.goalID);
-      //this.checked = false;
       this.dataService.addTaskToDatabase(this.description,this.priority,this.goalID,this.checked);
      
 

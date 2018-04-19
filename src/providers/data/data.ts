@@ -38,6 +38,7 @@ export class Data {
    userID: String;
 
    goalKey: String;
+   tasks: Tasks[]=[];
  
 
   constructor(public afs: AngularFirestore, private afAuth : AngularFireAuth) {
@@ -204,8 +205,10 @@ export class Data {
     console.log(goalID);
     var db = firebase.firestore();
     var newTask = db.collection("Tasks");
-    var newTaskDoc = newTask.doc();
-
+    var newTaskDoc = newTask.doc(taskDesc);
+    
+    var numberOfTasks = db.collection("Tasks").where("goalID", "==", goalID);
+    let count = numberOfTasks.onSnapshot((data => { return data.size;}));
     var task = {
       description: taskDesc,
       priority: priority,

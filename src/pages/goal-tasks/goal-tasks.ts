@@ -24,7 +24,7 @@ export class GoalTasksPage {
 
   description: string;
   checkedTasks: any;
-checked: boolean;
+  checked: boolean;
   percent: number;
 
   //TODO 
@@ -145,8 +145,29 @@ showAllTasks() : void
 
 reorderTasks(indexes) {
   let element = this.tasks[indexes.from]
+  var task = this.tasks[indexes.from];
+  var db = firebase.firestore();
+  console.log("The old priority is" + task.priority)
   this.tasks.splice(indexes.from, 1);
   this.tasks.splice(indexes.to, 0, element);
+  //task = this.tasks[indexes.from];
+  task = this.tasks.find(indexes => indexes.from = task.priority);
+  this.description = task.desecription;
+  var newTaskPriorityRef = db.collection("Tasks").doc(task.description);
+  return newTaskPriorityRef.update({
+    priority: task.priority
+})
+.then(function() {
+    console.log("Document successfully updated! " + task.description + " " + task.priority);
+})
+.catch(function(error) {
+    // The document probably doesn't exist.
+    console.error("Error updating document: ", error);
+});
+
+  //this.updateTasks();
+  
+  //return task.priority;
 }
 
 }
