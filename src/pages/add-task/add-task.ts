@@ -17,7 +17,7 @@ import { Data } from './../../providers/data/data';
 export class AddTaskPage {
 
   description: string = "";
-  priority:number =0;
+  priority:number;
   //priority
   goalID:string;
   checked: boolean

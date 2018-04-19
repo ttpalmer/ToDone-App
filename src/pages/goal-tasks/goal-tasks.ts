@@ -143,4 +143,10 @@ showAllTasks() : void
 });
 }
 
+reorderTasks(indexes) {
+  let element = this.tasks[indexes.from]
+  this.tasks.splice(indexes.from, 1);
+  this.tasks.splice(indexes.to, 0, element);
+}
+
 }

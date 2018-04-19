@@ -23,7 +23,7 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-list>
+  <ion-list reorder="true" (ionItemReorder)="reorderTasks($event)">
     <ion-item-sliding *ngFor="let task of tasks">
     <ion-item >
       <!-- TODO for some reason it toggles but not without giving an error first -->

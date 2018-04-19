@@ -25,7 +25,8 @@ export class HomePage {
 
   userID: String;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private auth: AuthServiceProvider, public dataService: Data, private afAuth : AngularFireAuth) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private auth: AuthServiceProvider, 
+  public dataService: Data, private afAuth : AngularFireAuth) {
     this.afAuth.authState.subscribe(user =>{
       if(user) this.userID = user.uid
       console.log('This users ID is: ' + this.userID);
