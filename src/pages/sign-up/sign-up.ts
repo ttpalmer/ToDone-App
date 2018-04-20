@@ -39,32 +39,7 @@ export class SignUpPage {
     console.log('ionViewDidLoad SignUpPage');
   }
 
- /* async doRegister()
-  {
-     var user =
-    {
-      username: this.username,
-      email: this.email,
-      password: this.password
-    }
-    try{
-   const result = await this.afAuth.auth.createUserWithEmailAndPassword(user.email,user.password);
-   var nuser = this.afAuth.auth.currentUser;
-   nuser.updateProfile({
-     displayName: user.username,
-     photoURL: null
-   }).then(function(){
-     //Update Successful
-     console.log(nuser.displayName);
-   }).catch(function(error){
-     //An error happend
-   });
-    }
-    catch(e){
-      console.error(e);
-    }
-  
-  }*/
+ 
 
   signup() {
 		let data = this.form.value;
