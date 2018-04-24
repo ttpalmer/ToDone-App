@@ -27,11 +27,11 @@
         <ion-list inset padding>
     
           <ion-item id="rounded">
-            <!-- <ion-label stacked>Email</ion-label> -->
+             <ion-label stacked>Email</ion-label> 
             <ion-input type="text" formControlName="email" placeholder="Enter you email address..."></ion-input>
           </ion-item>
           <ion-item id="rounded">
-            <!-- <ion-label stacked>Password</ion-label> -->
+             <ion-label stacked>Password</ion-label> 
             <ion-input type="password" formControlName="password" placeholder="Enter your password..."></ion-input>
           </ion-item>
         </ion-list>
@@ -47,7 +47,8 @@
         </div>
       <div  padding>
          <!-- <button class = "button" ion-button block (click) = "Register()">Register</button> -->
-          <p style="text-align: center; -webkit-text-fill-color: rgba(255, 255, 255, 1);">Sign In as guest <a [navPush]="homepage">here</a></p>
+         <button class = "fbbutton" ion-button icon-left (click) = "signInWithFaceboook()">
+          <ion-icon name= "logo-facebook"></ion-icon>Login with Facebook</button>
       </div>
 
      </body>

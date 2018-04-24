@@ -5,8 +5,11 @@ import { SignUpPage } from './../sign-up/sign-up';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AuthServiceProvider } from './../../providers/auth-service/auth-service';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import firebase from 'firebase';
+import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
+import { FirebaseApp } from 'angularfire2';
 
 /**
  * Generated class for the LaunchPage page.
@@ -26,7 +29,10 @@ export class LaunchPage {
 
   homepage = HomePage;
 
-  constructor(private afAuth: AngularFireAuth, public navCtrl: NavController, public navParams: NavParams,fb: FormBuilder, private auth: AuthServiceProvider) {
+  userData: any;
+
+  constructor(private afAuth: AngularFireAuth, public navCtrl: NavController, public navParams: NavParams,
+     fb: FormBuilder, private auth: AuthServiceProvider, private facebook: Facebook, private platform: Platform) {
     this.loginForm = fb.group({
       email: new FormControl ('', Validators.compose([Validators.required, Validators.email])),
 			password: new FormControl ('', Validators.compose([Validators.required, Validators.minLength(6)]))
@@ -63,6 +69,36 @@ export class LaunchPage {
 				error => this.loginError = error.message
 			);
     }
+
+    signInWithFaceboook(){
+      /*  this.facebook.login(['email', 'public_profile']).then((response: FacebookLoginResponse) => {
+          this.facebook.api('me?fields=id,name,email,first_name,picture.width(720).height(720).as(picture_large)', []).then(profile => {
+            this.userData = {email: profile['email'], first_name: profile['first_name'], picture: profile['picture_large']['data']['url'], username: profile['name']}
+          });
+        });
+      let provider = new firebase.auth.FacebookAuthProvider();
+      firebase.auth().signInWithRedirect(provider).then(()=> {
+        firebase.auth().getRedirectResult().then((result) => {
+          alert(JSON.stringify(result));
+        }).catch(function(error){
+          alert(JSON.stringify(error))
+        });
+      })*/
+      if(this.platform.is('cordova')){
+        return this.facebook.login(['email', 'public_profile']).then(res => {
+          const facebookCredentials = firebase.auth.FacebookAuthProvider.credential(res.authResponse.accessToken);
+          console.log(facebookCredentials);
+          return firebase.auth().signInWithCredential(facebookCredentials).then(()=> this.navCtrl.setRoot(HomePage));
+        })
+      }
+      else{
+        return this.afAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider()).
+        then(()=> this.navCtrl.setRoot(HomePage),
+          result => console.log(result));
+        ;
+      }
+      
+  }
  
 
 }

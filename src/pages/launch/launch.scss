@@ -111,5 +111,25 @@ page-launch {
         opacity: 1;
         transition: 0s
     }
+    .fbbutton {
+        position: relative;
+        background-color: rgba(13, 83, 163, 0.74);
+        border: 1px solid #fff ;
+       
+        display: block;
+        font-size: 14px;
+        color: #FFFFFF;
+        box-shadow: 1px;
+         padding: 20px;
+        // margin-left: 10%;
+         margin-right: 10%;
+        width: 100%;
+        text-align: center;
+        -webkit-transition-duration: 0.3s; /* Safari */
+        transition-duration: 0.3s;
+        text-decoration: none;
+        overflow: hidden;
+        cursor: pointer;
+    }
 
 }
