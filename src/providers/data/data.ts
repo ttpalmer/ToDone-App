@@ -38,7 +38,7 @@ export class Data {
    userID: String;
 
    goalKey: String;
-   tasks: Tasks[]=[];
+   tasks: any[];
  
 
   constructor(public afs: AngularFirestore, private afAuth : AngularFireAuth) {
@@ -207,17 +207,29 @@ export class Data {
     var newTask = db.collection("Tasks");
     var newTaskDoc = newTask.doc(taskDesc);
     
-    var numberOfTasks = db.collection("Tasks").where("goalID", "==", goalID);
-    let count = numberOfTasks.onSnapshot((data => { return data.size;}));
     var task = {
       description: taskDesc,
-      priority: priority,
       goalID: goalID,
+      priority:1,
       checked:false
     }
     newTaskDoc.set(task);
-    console.log("Document written with ID: "+ newTaskDoc.id);
+    let index = this.tasks.indexOf(task);
+    task.priority = index;
+    var newTaskPriorityRef = db.collection("Tasks").doc(task.description);
+    return newTaskPriorityRef.update({
+      priority: task.priority
+  })
+  .then(function() {
+      console.log("Document successfully updated! " + task.description + " " + task.priority);
+      console.log("Document written with ID: "+ newTaskDoc.id);
       console.log("You created a new task");
+  })
+  .catch(function(error) {
+      // The document probably doesn't exist.
+      console.error("Error updating document: ", error);
+  });
+    
     
     
     /*db.collection("Tasks").add({

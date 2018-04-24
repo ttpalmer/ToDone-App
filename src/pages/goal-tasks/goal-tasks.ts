@@ -1,8 +1,9 @@
+import { Observable } from 'rxjs/Observable';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { LaunchPage } from './../launch/launch';
 import { AuthServiceProvider } from './../../providers/auth-service/auth-service';
 import { Component } from '@angular/core';
-import { NavController, NavParams, ModalController, ViewController } from 'ionic-angular';
+import { NavController, NavParams, ModalController, ViewController, reorderArray,LoadingController } from 'ionic-angular';
 import { Data } from './../../providers/data/data';
 
 import { AddGoalPage } from "../addgoal/addgoal";
@@ -19,6 +20,7 @@ import firebase from 'firebase';
 export class GoalTasksPage {
   tasks=[];
   userID: String;
+  tasksList: any[];
   
   goalID:string;
 
@@ -30,7 +32,8 @@ export class GoalTasksPage {
   //TODO 
   //          WORK ON MAKING TASKS AUTO RELOAD
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private afAuth : AngularFireAuth, public dataService: Data, public view: ViewController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private afAuth : AngularFireAuth, 
+    public dataService: Data, public view: ViewController, public loadingCtrl: LoadingController) {
     this.goalID = navParams.get("goalID");
 
    this.afAuth.authState.subscribe(user =>{
@@ -143,22 +146,29 @@ showAllTasks() : void
 });
 }
 
+
 reorderTasks(indexes) {
-  let element = this.tasks[indexes.from]
-  var task = this.tasks[indexes.from];
+  
+ // let element = this.tasks[indexes.from]
+  var movingtask = this.tasks[indexes.from];
   var db = firebase.firestore();
-  console.log("The old priority is" + task.priority)
-  this.tasks.splice(indexes.from, 1);
-  this.tasks.splice(indexes.to, 0, element);
-  //task = this.tasks[indexes.from];
-  task = this.tasks.find(indexes => indexes.from = task.priority);
-  this.description = task.desecription;
-  var newTaskPriorityRef = db.collection("Tasks").doc(task.description);
+  console.log("The old priority is" + movingtask.priority)
+//  this.tasks.splice(indexes.from, 1);
+//  this.tasks.splice(indexes.to, 0, element);
+//  task = this.tasks[indexes.from];
+  this.tasks = reorderArray(this.tasks,indexes);
+  let oldindex =  this.tasks.indexOf(movingtask)+1;
+  var newtask =  this.tasks[indexes.to];
+  let newindex = this.tasks.indexOf(newtask)+1;
+  movingtask.priority = newtask.priority;
+  newtask.priority = newindex;
+  this.description = movingtask.description;
+  var newTaskPriorityRef = db.collection("Tasks").doc(movingtask.description);
   return newTaskPriorityRef.update({
-    priority: task.priority
+    priority: movingtask.priority
 })
 .then(function() {
-    console.log("Document successfully updated! " + task.description + " " + task.priority);
+    console.log("Document successfully updated! " + movingtask.description + " " + movingtask.priority);
 })
 .catch(function(error) {
     // The document probably doesn't exist.
