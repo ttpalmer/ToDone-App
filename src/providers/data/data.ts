@@ -210,25 +210,11 @@ export class Data {
     var task = {
       description: taskDesc,
       goalID: goalID,
-      priority:1,
+      priority: priority,
       checked:false
     }
     newTaskDoc.set(task);
-    let index = this.tasks.indexOf(task);
-    task.priority = index;
-    var newTaskPriorityRef = db.collection("Tasks").doc(task.description);
-    return newTaskPriorityRef.update({
-      priority: task.priority
-  })
-  .then(function() {
-      console.log("Document successfully updated! " + task.description + " " + task.priority);
-      console.log("Document written with ID: "+ newTaskDoc.id);
-      console.log("You created a new task");
-  })
-  .catch(function(error) {
-      // The document probably doesn't exist.
-      console.error("Error updating document: ", error);
-  });
+  
     
     
     

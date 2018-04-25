@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { Data } from './../../providers/data/data';
+import { Tasks } from '../../task';
 
 /**
  * Generated class for the AddtaskPage page.
@@ -21,6 +22,7 @@ export class AddTaskPage {
   //priority
   goalID:string;
   checked: boolean
+  tasks: Tasks[]=[];
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public dataService: Data, public view: ViewController) {
   	this.goalID = navParams.get("goalID");
