@@ -170,4 +170,8 @@ reorderTasks(indexes) {
   //return task.priority;
 }
 
+closeGoalTask() {
+  this.view.dismiss();
+}
+
 }
