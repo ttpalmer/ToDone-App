@@ -38,7 +38,7 @@ export class Data {
    userID: String;
 
    goalKey: String;
-   tasks: any[];
+   tasks: Tasks[]=[];
  
 
   constructor(public afs: AngularFirestore, private afAuth : AngularFireAuth) {
@@ -207,15 +207,17 @@ export class Data {
     var newTask = db.collection("Tasks");
     var newTaskDoc = newTask.doc(taskDesc);
     
+    var numberOfTasks = db.collection("Tasks").where("goalID", "==", goalID);
+    let count = numberOfTasks.onSnapshot((data => { return data.size;}));
     var task = {
       description: taskDesc,
-      goalID: goalID,
       priority: priority,
+      goalID: goalID,
       checked:false
     }
     newTaskDoc.set(task);
-  
-    
+    console.log("Document written with ID: "+ newTaskDoc.id);
+      console.log("You created a new task");
     
     
     /*db.collection("Tasks").add({
