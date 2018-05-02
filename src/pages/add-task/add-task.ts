@@ -1,3 +1,6 @@
+import { Observable } from 'rxjs/Observable';
+import { Tasks } from './../../models/task';
+import { AngularFirestoreCollection,AngularFirestore } from 'angularfire2/firestore';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { Data } from './../../providers/data/data';
@@ -16,14 +19,30 @@ import { Data } from './../../providers/data/data';
 })
 export class AddTaskPage {
 
+   tasksCollectionRef: AngularFirestoreCollection<Tasks>;
+   tasks$: Observable<Tasks[]>;
+  // tasksDoc: AngularFirestoreDocument<Tasks>;
+
   description: string = "";
   priority:number;
   //priority
   goalID:string;
   checked: boolean
+  tasks: Tasks[];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public dataService: Data, public view: ViewController) {
-  	this.goalID = navParams.get("goalID");
+   task: Tasks = {description: ''}
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, public dataService: Data, public view: ViewController, public afs: AngularFirestore) {
+    this.goalID = navParams.get("goalID");
+    console.log(this.goalID);
+    this.tasksCollectionRef = this.afs.collection('Tasks', ref  => ref.where("goalID", "==", this.goalID));
+    this.tasks$ = this.tasksCollectionRef.valueChanges();
+
+    this.getTasks().subscribe(tasks => {
+      console.log(tasks);
+      this.tasks = tasks;
+    }); 
+   
   
   }
 
@@ -32,11 +51,10 @@ export class AddTaskPage {
   }
 
   submitNewTask() {
-    if(this.description.length > 0) {
+    if(this.task.description != ' ') {
       console.log(this.goalID);
-      this.dataService.addTaskToDatabase(this.description,this.priority,this.goalID,this.checked);
-     
-
+      this.addTask(this.task);
+      this.task.description = '';
       this.view.dismiss();
     }
     else {
@@ -44,6 +62,25 @@ export class AddTaskPage {
     }
 
   }
+
+  addTask(task: Tasks)
+  {
+    task.checked = false;
+    task.goalID = this.goalID;
+    task.priority = this.tasks.length +1;
+    console.log('The prioriy of tasks is: ' + task.priority);
+    this.tasksCollectionRef.add(task);
+    console.log(task);
+    //task.priority = this.priority;
+    
+  
+  }
+
+  getTasks()
+  {
+   return this.tasks$; 
+  }
+
 
   closeAddTask() {
     this.view.dismiss();

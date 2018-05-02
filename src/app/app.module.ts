@@ -44,7 +44,8 @@ const firebaseAuth = {
     TabsPage,
     MenuPage,
     GoalTasksPage,
-    AddTaskPage
+    AddTaskPage,
+
   ],
   imports: [
     BrowserModule,

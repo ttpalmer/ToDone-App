@@ -1,7 +1,8 @@
 export interface Goals
 {
-    dateCreated: Date;
-    key: string;
-    description: string;
+    dateCreated?: any;
+    userID?: string;
+    description?: string;
+    goalID?: string;
         
 }

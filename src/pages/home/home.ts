@@ -1,3 +1,4 @@
+import { Goals } from './../../models/goal';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { LaunchPage } from './../launch/launch';
 import { AuthServiceProvider } from './../../providers/auth-service/auth-service';
@@ -21,7 +22,8 @@ import firebase from 'firebase';
 
 export class HomePage {
 
-  goals=[];
+  goals: Goals[];
+  goalID: string;
 
   userID: String;
 
@@ -30,45 +32,21 @@ export class HomePage {
     this.afAuth.authState.subscribe(user =>{
       if(user) this.userID = user.uid
       console.log('This users ID is: ' + this.userID);
-      var db = firebase.firestore();
-      var self=this;
-       db.collection("Goals").orderBy("dateCreated").where("key", "==", this.userID).get()
-      .then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
-            // doc.data() is never undefined for query doc snapshots
-            console.log(doc.id, " => ", doc.data());
-            self.goals.push({goalID:doc.id, description: doc.get("description")});
-        });
-    })
-    .catch(function(error) {
-        console.log("Error getting documents: ", error);
-    });
       
 });
+    this.dataService.getUsersGoals().subscribe(goals => {
+      console.log(goals);
+      this.goals = goals;
+    });
   }
 
   ionViewDidLoad(){
-   console.log('Signed in with email' + " "+ this.auth.getEmail());
-  /* var db = firebase.firestore();
-   var self=this;
-    db.collection("Goals").where("key", "==", this.userID).get()
-   .then(function(querySnapshot) {
-     querySnapshot.forEach(function(doc) {
-         // doc.data() is never undefined for query doc snapshots
-         console.log(doc.id, " => ", doc.data());
-         self.goals.push({goalID:doc.id, description: doc.get("description")});
-     });
- })
- .catch(function(error) {
-     console.log("Error getting documents: ", error);
- });*/
-   
-   
+   console.log('Signed in with email: '+ this.auth.getEmail());
   }
   
   ionViewDidEnter(){
     console.log('The view has been refreshed new goals should be displayeed');
-   this.updateGoals();
+ //  this.updateGoals();
   }
   addYourGoal() {
    this.navCtrl.push(AddGoalPage);
@@ -88,7 +66,7 @@ export class HomePage {
     this.navCtrl.setRoot(LaunchPage);
   }
 
-  updateGoals()
+ /* updateGoals()
   {
     var db = firebase.firestore();
     var self=this;
@@ -107,7 +85,7 @@ export class HomePage {
   .catch(function(error) {
       console.log("Error getting documents: ", error);
   });
-  }
+  }*/
   removeGoal(goal,ev)
   {
     var db = firebase.firestore();
@@ -119,7 +97,7 @@ export class HomePage {
     console.error("Error removing document: ", error);
   });
   ev.stopPropagation();
-  this.updateGoals();
+  //this.updateGoals();
 
   }
 

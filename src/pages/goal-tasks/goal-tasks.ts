@@ -1,8 +1,11 @@
+import { Observable } from 'rxjs/Observable';
+import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
+import { Tasks } from './../../models/task';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { LaunchPage } from './../launch/launch';
 import { AuthServiceProvider } from './../../providers/auth-service/auth-service';
 import { Component } from '@angular/core';
-import { NavController, NavParams, ModalController, ViewController } from 'ionic-angular';
+import { NavController, NavParams, ModalController, ViewController, Events } from 'ionic-angular';
 import { Data } from './../../providers/data/data';
 
 import { AddGoalPage } from "../addgoal/addgoal";
@@ -11,15 +14,17 @@ import { AddTaskPage } from '../add-task/add-task';
 import firebase from 'firebase';
 
 
+
 @Component({
   selector: 'page-goal-tasks',
   templateUrl: 'goal-tasks.html'
 })
 
 export class GoalTasksPage {
-  tasks=[];
+  tasks: Tasks[];
   userID: String;
-  
+  tasksCollectionRef: AngularFirestoreCollection<Tasks>
+   tasks$: Observable<Tasks[]>
   goalID:string;
 
   description: string;
@@ -27,40 +32,39 @@ export class GoalTasksPage {
   checked: boolean;
   percent: number;
 
-  //TODO 
-  //          WORK ON MAKING TASKS AUTO RELOAD
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private afAuth : AngularFireAuth, public dataService: Data, public view: ViewController) {
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, private afAuth : AngularFireAuth, public dataService: Data, public view: ViewController, public afs: AngularFirestore) {
     this.goalID = navParams.get("goalID");
-
+    console.log(this.goalID);
+    this.tasksCollectionRef = this.afs.collection('Tasks', ref  => ref.where("goalID", "==", this.goalID).orderBy("priority"));
+    this.tasks$ = this.tasksCollectionRef.snapshotChanges().map(actions => {
+          return actions.map(a => {
+            const data = a.payload.doc.data() as Tasks;
+            console.log(data);
+            return data;
+          });
+        });
    this.afAuth.authState.subscribe(user =>{
       if(user) this.userID = user.uid
       console.log('This users ID is: ' + this.userID);
-    var db = firebase.firestore();
-      var self=this;
-       db.collection("Tasks").orderBy("priority").where("goalID", "==", this.goalID).limit(1).get()
-      .then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
-            // doc.data() is never undefined for query doc snapshots
-            console.log(doc.id, " => ", doc.data());
-            self.tasks.push({ goalID:doc.id, description:doc.get("description"), priority: doc.get("priority")});
-            console.log("Tasks have been pushed!!")
-          
-        });
-    })
-    .catch(function(error) {
-        console.log("Error getting documents: ", error);
-    });
+   
+  });
+  
+  this.getTasks().subscribe(tasks => {
+    console.log(tasks);
+    this.tasks = tasks;
   });
   }
 
-  ionViewDidLoad(){
-   
-  }
   
   ionViewWillEnter(){
-    console.log('New tasks have been retrieved' + this.dataService.getTasks(this.goalID));
-    this.updateTasks();
+    console.log('New tasks have been retrieved' + this.getTasks());
+    this.getTasks().subscribe(tasks => {
+      console.log(tasks);
+      this.tasks = tasks;
+    });
+  //  this.updateTasks();
   }
 
 
@@ -76,26 +80,13 @@ export class GoalTasksPage {
   //  this.tasks.toggleItem(item);
   }
 
-  updateTasks(){
-    var db = firebase.firestore();
-      var self=this;
-       db.collection("Tasks").orderBy("priority").where("goalID", "==", this.goalID).limit(1).get()
-      .then(function(querySnapshot) {
-        //Set tasks array set to zero to update with new task
-        self.tasks =[];
-        querySnapshot.forEach(function(doc) {
-            // doc.data() is never undefined for query doc snapshots
-            console.log(doc.id, " => ", doc.data());
-            self.tasks.push({ goalID:doc.id, description:doc.get("description"), priority: doc.get("priority")});
-            console.log("Tasks have been pushed!!")
-          
-        });
-    })
-    .catch(function(error) {
-        console.log("Error getting documents: ", error);
-    });
 
+  getTasks()
+  {
+   return this.tasks$; 
   }
+
+ 
   removeTask(task)
   {
     var db = firebase.firestore();
@@ -106,7 +97,7 @@ export class GoalTasksPage {
   {
     console.error("Error removing document: ", error);
   });
-  this.updateTasks();
+ // this.updateTasks();
 }
 
 isChecked()
@@ -133,7 +124,7 @@ showAllTasks() : void
     querySnapshot.forEach(function(doc) {
         // doc.data() is never undefined for query doc snapshots
         console.log(doc.id, " => ", doc.data());
-        self.tasks.push({ goalID:doc.id, description:doc.get("description"), priority: doc.get("priority")});
+      //  self.tasks.push({ goalID:doc.id, description:doc.get("description"), priority: doc.get("priority")});
         console.log("Tasks have been pushed!!")
       
     });
@@ -151,19 +142,8 @@ reorderTasks(indexes) {
   this.tasks.splice(indexes.from, 1);
   this.tasks.splice(indexes.to, 0, element);
   //task = this.tasks[indexes.from];
-  task = this.tasks.find(indexes => indexes.from = task.priority);
-  this.description = task.desecription;
-  var newTaskPriorityRef = db.collection("Tasks").doc(task.description);
-  return newTaskPriorityRef.update({
-    priority: task.priority
-})
-.then(function() {
-    console.log("Document successfully updated! " + task.description + " " + task.priority);
-})
-.catch(function(error) {
-    // The document probably doesn't exist.
-    console.error("Error updating document: ", error);
-});
+ // task = this.tasks.find(indexes => indexes.from = task.priority);
+ // this.description = task.desecription;
 
   //this.updateTasks();
   
@@ -171,7 +151,7 @@ reorderTasks(indexes) {
 }
 
 closeGoalTask() {
-  this.view.dismiss();
+  this.view.dismiss(this.tasks$);
 }
 
 }

@@ -1,12 +1,11 @@
-import { Tasks } from './../../task';
-import { Goals } from '../../goal';
+import { Tasks } from '../../models/task';
+import { Goals } from '../../models/goal';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument, fromDocRef } from 'angularfire2/firestore';
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import firebase from 'firebase';
 
-declare var require: any
 
 /*
   Generated class for the DataProvider provider.
@@ -14,13 +13,7 @@ declare var require: any
   See https://angular.io/guide/dependency-injection for more info on providers
   and Angular DI.
 */
-/*export interface Goals {
-  key: String;
-  description: string;
-}
-export interface Tasks{
-  description: string;
-}*/
+
 
 @Injectable()
 export class Data {
@@ -33,38 +26,30 @@ export class Data {
    tasks$: Observable<Tasks[]>;
    tasksDoc: AngularFirestoreDocument<Tasks>;
 
+   userID: string;
 
+   goalID: string;
 
-   userID: String;
-
-   goalKey: String;
-   tasks: Tasks[]=[];
+   //goalKey: String;
+   //tasks: Tasks[]=[];
+   //goals: Goals[]=[];
  
 
   constructor(public afs: AngularFirestore, private afAuth : AngularFireAuth) {
     this.afAuth.authState.subscribe(user =>{
       if(user) this.userID = user.uid
       console.log('This users ID is: ' + this.userID);
-   
-    this.goalsCollectionRef = this.afs.collection('Goals', ref => ref.orderBy('dateCreated').where("key", "==", user.uid));
-    this.goals$ = this.goalsCollectionRef.snapshotChanges().map(changes => {
-      return changes.map( a => {
-        const data = a.payload.doc.data() as Goals;
-        data.key = a.payload.doc.id;
-        return data;
-      });
-      
-
-    });
-    this.tasksCollectionRef = this.afs.collection('Tasks', ref => ref.orderBy('priority'));
-    this.tasks$ = this.tasksCollectionRef.snapshotChanges().map(changes => {
-      return changes.map( a => {
-        const data = a.payload.doc.data() as Tasks;
-      //  data.goalID = a.payload.doc.id;
-        return data;
+     
+      this.goalsCollectionRef = this.afs.collection('Goals', ref => ref.where("userID", "==", this.userID).orderBy('dateCreated'));
+      this.goals$ = this.goalsCollectionRef.snapshotChanges().map(actions => {
+        return actions.map(a => {
+          const data = a.payload.doc.data() as Goals;
+          data.goalID = a.payload.doc.id;
+          console.log('The goal ID is: ' + data.goalID);
+          return data;
+        });
       });
     });
- });
     console.log('Hello Data Provider');
 
   }
@@ -130,50 +115,23 @@ export class Data {
     });
   }
 
-  addGoal(goal){
+  addGoal(goal: Goals ){
+
+    goal.dateCreated = firebase.firestore.FieldValue.serverTimestamp();
+    goal.userID = this.userID;
     this.goalsCollectionRef.add(goal);
+    
+    console.log(goal);
   }
+
+
   getUsersGoals()
   {
    return this.goals$; 
   }
  
-  getTasks(goalID:string) {
-     console.log(goalID);
-     if(!this.userID)
-       return;
-       this.tasksCollectionRef = this.afs.collection('Tasks');
-       this.tasks$ = this.tasksCollectionRef.valueChanges();
-       console.log("Tasks were retrieved");
-       console.log(this.tasks$);
+  getTasks(){ 
        return this.tasks$;
-
-   /* var db = firebase.firestore();
-    var self=this;
-    db.collection("Tasks").get().then(function(querySnapshot) {
-    var tasks=[];
-    querySnapshot.forEach(function(doc) {
-        // doc.data() is never undefined for query doc snapshots
-        console.log(doc.id, " => ", doc.data());
-        tasks.push({goalID:doc.id,description:doc.get("description"),priority:doc.get("priority"),checked:doc.get("checked")});
-    })
-    return tasks;
-  });
-    
-
-    // this.tasksCollectionRef = this.afs.collection('Tasks', ref => ref.orderBy('priority'));
-    // this.tasks$ = this.tasksCollectionRef.valueChanges();
-    // console.log("Tasks were retrieved");
-    // return this.tasks$;
-
-//     var scoresRef = firebase.database().ref("Tasks");
-// scoresRef.orderByChild("goalID").equalTo(goalID).on("value", function(snapshot) {
-//   snapshot.forEach(function(data) {
-//     console.log("The " + data.key + " score is " + data.val());
-//   });
-// });*/
-
-
   }
 
   addGoalToDatabase(goalDesc: string, key: String ) {
@@ -197,7 +155,7 @@ export class Data {
 
 
 //TODO add priority as int and goal id
-  addTaskToDatabase(taskDesc: string,priority:number,goalID:string,checked: boolean /*int taskPriority, Goal ID?? */) {
+  addTaskToDatabase(taskDesc: string,priority:string,goalID:string,checked: boolean /*int taskPriority, Goal ID?? */) {
 
     if(!this.userID)
       return;
@@ -206,9 +164,6 @@ export class Data {
     var db = firebase.firestore();
     var newTask = db.collection("Tasks");
     var newTaskDoc = newTask.doc(taskDesc);
-    
-    var numberOfTasks = db.collection("Tasks").where("goalID", "==", goalID);
-    let count = numberOfTasks.onSnapshot((data => { return data.size;}));
     var task = {
       description: taskDesc,
       priority: priority,

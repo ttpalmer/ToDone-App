@@ -23,22 +23,28 @@
   
     <ion-card-content>
       <ion-item>
-        <ion-input type="text" [(ngModel)]="description" placeholder="What's your next Task....?"></ion-input>
+        <ion-input type="text" [(ngModel)]="task.description" placeholder="What's your next Task....?"></ion-input>
       </ion-item>
     </ion-card-content>
   
   </ion-card>
 
-  <ion-card>
+  <!--ion-card>
   
   
     <ion-card-content>
       <ion-item>
-        <ion-input type="text" [(ngModel)]="priority" placeholder="What's the task priority....?(1-5)"></ion-input>
+        <ion-label>Priority</ion-label>
+        <ion-select [(ngModel)]="priority">
+          <ion-option value="high">HIGH!!!</ion-option>
+          <ion-option value="medium">MEDIUM!!</ion-option>
+          <ion-option value="low">LOW!</ion-option>
+          <ion-option value="none">NONE</ion-option>
+        </ion-select>
       </ion-item>
     </ion-card-content>
   
-  </ion-card>
+  </ion-card>-->
 
   <button full ion-button color="primary" (click)="submitNewTask()">Submit</button>
 
