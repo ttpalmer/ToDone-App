@@ -27,7 +27,7 @@
 
 <ion-content padding>
   <ion-item-group reorder="true" (ionItemReorder)="reorderTasks($event)">
-    <ion-item-sliding *ngFor="let task of tasks">
+    <ion-item-sliding *ngFor="let task of (tasks$ | async)">
       <ion-item-divider color = "primary" >priority</ion-item-divider>
         <ion-item  >
       <!-- TODO for some reason it toggles but not without giving an error first -->

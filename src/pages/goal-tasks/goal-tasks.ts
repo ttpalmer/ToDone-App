@@ -1,11 +1,11 @@
 import { Observable } from 'rxjs/Observable';
-import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
+import { AngularFirestoreCollection, AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { Tasks } from './../../models/task';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { LaunchPage } from './../launch/launch';
 import { AuthServiceProvider } from './../../providers/auth-service/auth-service';
 import { Component } from '@angular/core';
-import { NavController, NavParams, ModalController, ViewController, Events } from 'ionic-angular';
+import { NavController, NavParams, ModalController, ViewController, Events, reorderArray } from 'ionic-angular';
 import { Data } from './../../providers/data/data';
 
 import { AddGoalPage } from "../addgoal/addgoal";
@@ -23,8 +23,9 @@ import firebase from 'firebase';
 export class GoalTasksPage {
   tasks: Tasks[];
   userID: String;
-  tasksCollectionRef: AngularFirestoreCollection<Tasks>
-   tasks$: Observable<Tasks[]>
+  tasksCollectionRef: AngularFirestoreCollection<Tasks>;
+   tasks$: Observable<Tasks[]>;
+   tasksDoc: AngularFirestoreDocument<Tasks>;
   goalID:string;
 
   description: string;
@@ -34,37 +35,40 @@ export class GoalTasksPage {
 
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private afAuth : AngularFireAuth, public dataService: Data, public view: ViewController, public afs: AngularFirestore) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private afAuth : AngularFireAuth, 
+    public dataService: Data, public view: ViewController, public afs: AngularFirestore) {
+
     this.goalID = navParams.get("goalID");
     console.log(this.goalID);
-    this.tasksCollectionRef = this.afs.collection('Tasks', ref  => ref.where("goalID", "==", this.goalID).orderBy("priority"));
-    this.tasks$ = this.tasksCollectionRef.snapshotChanges().map(actions => {
-          return actions.map(a => {
-            const data = a.payload.doc.data() as Tasks;
-            console.log(data);
-            return data;
-          });
-        });
+      
    this.afAuth.authState.subscribe(user =>{
       if(user) this.userID = user.uid
       console.log('This users ID is: ' + this.userID);
-   
+      
   });
+  this.tasksCollectionRef = this.afs.collection('Tasks', ref  => ref.where("goalID", "==", this.goalID).orderBy("priority"));
+        
+    
   
-  this.getTasks().subscribe(tasks => {
-    console.log(tasks);
-    this.tasks = tasks;
-  });
   }
 
   
   ionViewWillEnter(){
-    console.log('New tasks have been retrieved' + this.getTasks());
-    this.getTasks().subscribe(tasks => {
-      console.log(tasks);
-      this.tasks = tasks;
-    });
-  //  this.updateTasks();
+  /*  this.tasksCollectionRef = this.afs.collection('Tasks', ref  => ref.where("goalID", "==", this.goalID).orderBy("priority"));
+    this.tasksDoc = this.afs.doc<Tasks>('Tasks/${task.taskID}');*/
+    this.tasks$ = this.tasksCollectionRef.snapshotChanges().map(actions => {
+          return actions.map(a => {
+            const data = a.payload.doc.data() as Tasks;
+         //   var task = data;
+            console.log(data);
+          //  data.priority = a.payload.newIndex +1;
+           // task.priority = data.priority;
+           // task.taskID = a.payload.doc.id;
+            return data;
+          });
+        });
+    this.getTasks();
+  
   }
 
 
@@ -83,7 +87,12 @@ export class GoalTasksPage {
 
   getTasks()
   {
-   return this.tasks$; 
+  // return this.tasks$; 
+  this.dataService.getTasks(this.goalID).subscribe(tasks => {
+    this.tasks = [];
+    console.log(tasks);
+    this.tasks = tasks;
+  });
   }
 
  
@@ -134,20 +143,30 @@ showAllTasks() : void
 });
 }
 
-reorderTasks(indexes) {
-  let element = this.tasks[indexes.from]
-  var task = this.tasks[indexes.from];
-  var db = firebase.firestore();
-  console.log("The old priority is" + task.priority)
-  this.tasks.splice(indexes.from, 1);
-  this.tasks.splice(indexes.to, 0, element);
-  //task = this.tasks[indexes.from];
- // task = this.tasks.find(indexes => indexes.from = task.priority);
- // this.description = task.desecription;
+updateTasks(task:Tasks)
+{
+  console.log(this.tasks);
+      this.tasks.forEach(item =>{
+        console.log(item);
+     // task = item;
+     this.dataService.updateTask(item);
+  })
 
-  //this.updateTasks();
-  
-  //return task.priority;
+}
+
+
+reorderTasks(indexes) {
+
+ this.tasks = reorderArray(this.tasks,indexes);
+ console.log(this.tasks);
+ for(let i = 0; i < this.tasks.length; i++)
+ {
+   console.log(this.tasks[i]);
+    var task = this.tasks[i];
+    task.priority = i+1;
+
+ }
+ this.updateTasks(task);
 }
 
 closeGoalTask() {

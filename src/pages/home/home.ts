@@ -66,38 +66,12 @@ export class HomePage {
     this.navCtrl.setRoot(LaunchPage);
   }
 
- /* updateGoals()
-  {
-    var db = firebase.firestore();
-    var self=this;
-    
-     db.collection("Goals").orderBy("dateCreated").where("key", "==", this.userID).get()
-    .then(function(querySnapshot) {
-      //Set goals array to zero to add new goals
-      self.goals =[];
-      querySnapshot.forEach(function(doc) {
-          // doc.data() is never undefined for query doc snapshots
-          console.log(doc.id, " => ", doc.data());
-        //  if(doc.id != doc.id)
-            self.goals.push({goalID:doc.id, description: doc.get("description")});
-      });
-  })
-  .catch(function(error) {
-      console.log("Error getting documents: ", error);
-  });
-  }*/
   removeGoal(goal,ev)
   {
-    var db = firebase.firestore();
-    db.collection("Goals").doc(goal.goalID).delete().then(function()
-  {
-    console.log("Document successfully deleted!! " + goal.description);
-  }).catch(function (error)
-  {
-    console.error("Error removing document: ", error);
-  });
+    console.log(goal);
+    this.dataService.removeGoal(goal);
+
   ev.stopPropagation();
-  //this.updateGoals();
 
   }
 

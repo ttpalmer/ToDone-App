@@ -22,6 +22,7 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { Data } from '../providers/data/data';
 import { NgxErrorsModule } from '@ultimate/ngxerrors';
+import { Task,Tasks } from '../models/task';
 
 const firebaseAuth = {
   apiKey: "AIzaSyAENTge-cuAbAXzrrH_ScMnc6j-iJZGgiQ",
@@ -76,7 +77,8 @@ const firebaseAuth = {
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     AuthServiceProvider,
     Data,
-    Facebook
+    Facebook,
+    Task
   ]
 })
 export class AppModule {}

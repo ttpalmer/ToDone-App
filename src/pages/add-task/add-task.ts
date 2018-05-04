@@ -53,9 +53,13 @@ export class AddTaskPage {
   submitNewTask() {
     if(this.task.description != ' ') {
       console.log(this.goalID);
-      this.addTask(this.task);
+      this.task.checked = false;
+      this.task.goalID = this.goalID;
+      this.task.priority = this.tasks.length +1;
+      this.dataService.addTask(this.task,this.goalID);
       this.task.description = '';
       this.view.dismiss();
+     
     }
     else {
       console.log("You haven't typed anything")
@@ -65,14 +69,13 @@ export class AddTaskPage {
 
   addTask(task: Tasks)
   {
+    
     task.checked = false;
     task.goalID = this.goalID;
     task.priority = this.tasks.length +1;
-    console.log('The prioriy of tasks is: ' + task.priority);
-    this.tasksCollectionRef.add(task);
+   console.log('The prioriy of tasks is: ' + task.priority);
+  //  this.tasksCollectionRef.add(task);
     console.log(task);
-    //task.priority = this.priority;
-    
   
   }
 
