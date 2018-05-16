@@ -1,3 +1,4 @@
+import { PopoverPage } from './../pages/popover/popover';
 import { MenuPage } from './../pages/menu/menu';
 import { TabsPage } from './../pages/tabs/tabs';
 import { MyAccountPage } from './../pages/myaccount/myaccount';
@@ -24,6 +25,7 @@ import { Data } from '../providers/data/data';
 import { NgxErrorsModule } from '@ultimate/ngxerrors';
 import { Task,Tasks } from '../models/task';
 
+
 const firebaseAuth = {
   apiKey: "AIzaSyAENTge-cuAbAXzrrH_ScMnc6j-iJZGgiQ",
   authDomain: "todone-usc546.firebaseapp.com",
@@ -46,6 +48,7 @@ const firebaseAuth = {
     MenuPage,
     GoalTasksPage,
     AddTaskPage,
+    PopoverPage,
 
   ],
   imports: [
@@ -69,7 +72,8 @@ const firebaseAuth = {
     TabsPage,
     MenuPage,
     GoalTasksPage,
-    AddTaskPage
+    AddTaskPage,
+    PopoverPage
   ],
   providers: [
     StatusBar,

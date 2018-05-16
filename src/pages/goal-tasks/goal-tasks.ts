@@ -1,3 +1,4 @@
+import { PopoverPage } from './../popover/popover';
 import { Observable } from 'rxjs/Observable';
 import { AngularFirestoreCollection, AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { Tasks } from './../../models/task';
@@ -5,7 +6,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { LaunchPage } from './../launch/launch';
 import { AuthServiceProvider } from './../../providers/auth-service/auth-service';
 import { Component } from '@angular/core';
-import { NavController, NavParams, ModalController, ViewController, Events, reorderArray } from 'ionic-angular';
+import { NavController, NavParams, ModalController, ViewController, Events, reorderArray, PopoverController, AlertController } from 'ionic-angular';
 import { Data } from './../../providers/data/data';
 
 import { AddGoalPage } from "../addgoal/addgoal";
@@ -21,7 +22,7 @@ import firebase from 'firebase';
 })
 
 export class GoalTasksPage {
-  tasks: Tasks[];
+  importantTask: Tasks[];
   userID: String;
   tasksCollectionRef: AngularFirestoreCollection<Tasks>;
    tasks$: Observable<Tasks[]>;
@@ -33,10 +34,13 @@ export class GoalTasksPage {
   checked: boolean;
   percent: number;
 
+  isShown: boolean;
+  tasks: Tasks[];
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private afAuth : AngularFireAuth, 
-    public dataService: Data, public view: ViewController, public afs: AngularFirestore) {
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, private afAuth : AngularFireAuth, public alertCtrl: AlertController ,
+    public dataService: Data, public view: ViewController, public afs: AngularFirestore, public popoverCtrl: PopoverController) {
 
     this.goalID = navParams.get("goalID");
     console.log(this.goalID);
@@ -46,7 +50,7 @@ export class GoalTasksPage {
       console.log('This users ID is: ' + this.userID);
       
   });
-  this.tasksCollectionRef = this.afs.collection('Tasks', ref  => ref.where("goalID", "==", this.goalID).orderBy("priority"));
+  this.tasksCollectionRef = this.afs.collection('Tasks', ref  => ref.where("goalID", "==", this.goalID).orderBy("priority").limit(1));
         
     
   
@@ -84,15 +88,36 @@ export class GoalTasksPage {
   //  this.tasks.toggleItem(item);
   }
 
+  showImportantTask()
+  {
+    this.tasksCollectionRef = this.afs.collection('Tasks', ref  => ref.where("goalID", "==", this.goalID).orderBy("priority").limit(1));
+    this.tasks$ = this.tasksCollectionRef.snapshotChanges().map(actions => {
+      return actions.map(a => {
+        const data = a.payload.doc.data() as Tasks;
+        console.log(data);
+        return data;
+      });
+    });
+  this.getTasks();
+  }
+
 
   getTasks()
   {
-  // return this.tasks$; 
   this.dataService.getTasks(this.goalID).subscribe(tasks => {
     this.tasks = [];
     console.log(tasks);
     this.tasks = tasks;
   });
+  }
+
+  getImportantTask()
+  {
+    this.dataService.getTasks(this.goalID).subscribe(tasks => {
+      this.importantTask = [];
+      console.log(tasks);
+      this.importantTask = tasks;
+    });
   }
 
  
@@ -106,41 +131,73 @@ export class GoalTasksPage {
   {
     console.error("Error removing document: ", error);
   });
- // this.updateTasks();
+
 }
 
-isChecked()
+isChecked(ev)
 {
-   this.checked = false;
-  let count = 0;
-    this.tasks.forEach(task => {
-			if(task.checked){
-        count++;
-        console.log(count);
-			}
-		})
-		return count;
+      for(let i = 0; i < this.tasks.length; i++)
+      {
+        var task = this.tasks[i];
+          if(task.checked)
+     {
+       task.checked = true;
+       task.priority = this.tasks.length;
+        this.dataService.updateTask(task);
+        console.log(task);
+     }
+     else if (!task.checked){
+        task.checked = false;
+        task.priority = i+1;
+     console.log( task );
+     console.log('The index of the task is: ' + task.priority);
+    this.dataService.updateTask(task);
+}
+      }
+ 
   
+  
+   
+  /*let confirm = this.alertCtrl.create({
+    title: 'Are you finished?',
+    message: 'Are you sure you have finished this task?',
+    buttons: [
+      {
+        text: 'No',
+        handler: () => {
+          console.log('No clicked');
+          task.checked = false;
+          task.priority = this.tasks.indexOf(task)+1;
+          this.dataService.updateTask(task);
+        }
+      },
+      {
+        text: 'Yes',
+        handler: () => {
+          console.log('Yes clicked');
+          task.checked = true;
+          task.priority = this.tasks.length+1;
+          this.dataService.updateTask(task);
+        }
+      }
+    ]
+  });
+  confirm.present();*/
+
+  console.log(task);
 }
 showAllTasks() : void
 {
-  var db = firebase.firestore();
-  var self=this;
-   db.collection("Tasks").orderBy("priority").where("goalID", "==", this.goalID).get()
-  .then(function(querySnapshot) {
-    //Set tasks array set to zero to update with new task
-    self.tasks =[];
-    querySnapshot.forEach(function(doc) {
-        // doc.data() is never undefined for query doc snapshots
-        console.log(doc.id, " => ", doc.data());
-      //  self.tasks.push({ goalID:doc.id, description:doc.get("description"), priority: doc.get("priority")});
-        console.log("Tasks have been pushed!!")
-      
+  this.tasksCollectionRef = this.afs.collection('Tasks', ref  => ref.where("goalID", "==", this.goalID).orderBy("priority"));
+
+  this.tasks$ = this.tasksCollectionRef.snapshotChanges().map(actions => {
+    return actions.map(a => {
+      const data = a.payload.doc.data() as Tasks;
+      console.log(data);
+      return data;
     });
-})
-.catch(function(error) {
-    console.log("Error getting documents: ", error);
-});
+  });
+this.getTasks();
 }
 
 updateTasks(task:Tasks)
@@ -172,5 +229,40 @@ reorderTasks(indexes) {
 closeGoalTask() {
   this.view.dismiss(this.tasks$);
 }
+
+tasksShown(event)
+{
+  if (this.tasks.length == 1){
+    this.isShown = false;
+  }
+  else if (this.tasks.length > 1)
+  {
+    this.isShown = false
+  } 
+}
+
+presentPopover(myEvent){
+  let popover = this.popoverCtrl.create(PopoverPage,
+  {
+    goalID: this.goalID,
+    tasks: this.tasks
+  });
+
+  let stable = this.tasks$;
+  popover.onDidDismiss(data => {
+    console.log(data)
+    if(data == null)
+    {
+      data = stable;
+     this.tasks$ = data;
+    }
+    this.tasks$ = data;
+  });
+  popover.present({
+    ev: myEvent
+  });
+  this.getTasks();
+}
+
 
 }
