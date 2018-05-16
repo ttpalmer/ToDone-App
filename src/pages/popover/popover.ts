@@ -15,7 +15,7 @@ import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angul
 @IonicPage()
 @Component({
   //selector: 'page-popover',
- // templateUrl: 'popover.html',\
+  //templateUrl: 'popover.html',
  template:`
 
  <ion-list >

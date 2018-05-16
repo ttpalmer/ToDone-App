@@ -134,26 +134,23 @@ export class GoalTasksPage {
 
 }
 
-isChecked(ev)
+isChecked(task:Tasks ,ev)
 {
-      for(let i = 0; i < this.tasks.length; i++)
-      {
-        var task = this.tasks[i];
-          if(task.checked)
+
+      if(ev.checked)
      {
-       task.checked = true;
-       task.priority = this.tasks.length;
+      task.checked = true;
+      task.priority = this.tasks.length;
         this.dataService.updateTask(task);
         console.log(task);
      }
-     else if (!task.checked){
-        task.checked = false;
-        task.priority = i+1;
-     console.log( task );
-     console.log('The index of the task is: ' + task.priority);
-    this.dataService.updateTask(task);
-}
-      }
+     else if(!ev.checked)
+     {
+       task.checked = false;
+       task.priority = task.priority -1;
+       this.dataService.updateTask(task);
+     }
+     
  
   
   
