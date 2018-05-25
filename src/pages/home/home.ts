@@ -3,7 +3,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { LaunchPage } from './../launch/launch';
 import { AuthServiceProvider } from './../../providers/auth-service/auth-service';
 import { Component } from '@angular/core';
-import { NavController, NavParams, ModalController, Events } from 'ionic-angular';
+import { NavController, NavParams, ModalController, Events, App } from 'ionic-angular';
 import { Data } from './../../providers/data/data';
 
 import { AddGoalPage } from "../addgoal/addgoal";
@@ -28,16 +28,19 @@ export class HomePage {
   userID: String;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private auth: AuthServiceProvider, 
-  public dataService: Data, private afAuth : AngularFireAuth) {
-    this.afAuth.authState.subscribe(user =>{
+  public dataService: Data, private afAuth : AngularFireAuth, public _app: App) {
+   /* this.afAuth.authState.subscribe(user =>{*/
+    let user = firebase.auth().currentUser;
       if(user) this.userID = user.uid
       console.log('This users ID is: ' + this.userID);
-      
-});
-    this.dataService.getUsersGoals().subscribe(goals => {
+
+      this.dataService.getUsersGoals().subscribe(goals => {
       console.log(goals);
       this.goals = goals;
     });
+      
+//});
+    
   }
 
   ionViewDidLoad(){
@@ -63,7 +66,7 @@ export class HomePage {
   Logout() :void
   {
     this.auth.signOut();
-    this.navCtrl.setRoot(LaunchPage);
+    this._app.getRootNav().setRoot(LaunchPage);
   }
 
   removeGoal(goal,ev)

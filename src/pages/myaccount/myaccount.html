@@ -12,40 +12,70 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     </ion-buttons>
-    <ion-title >{{ this.firstName }}</ion-title>
+    <ion-title >{{ user.name }}</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
-<ion-content padding>
+<ion-content center>
 
-    <ion-list>
-        <ion-item>
-          <ion-label floating>First Name</ion-label>
-          <ion-input type="text" [(ngModel)]="firstName"></ion-input>
-        </ion-item>
-    
-        <ion-item>
-          <ion-label floating>Last Name</ion-label>
-          <ion-input type="text" [(ngModel)]="lastName"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label floating> Username</ion-label>
-          <ion-input type="text" [(ngModel)]="userName"></ion-input>
-        </ion-item>
-      </ion-list>
-
+  <div class= "bg">
+    <div class = "container">
+      <form (ngSubmit)="userInfo()" [formGroup] = "form">
+          <ion-list padding inset scroll="false">
       
+  
+            <ion-item id="rounded" >
+                <ion-label stacked>Name</ion-label> 
+              <ion-input  type="text" placeholder="{{user.name}}" formControlName="name" [disabled]="inactive">{{user.name}} </ion-input>
+              <!-- <button class = "editButton" ion-button item-end (click)="changeStatus()">
+             <ion-icon  name="create"></ion-icon>
+         </button> -->
+       
+            </ion-item> 
+     
+            <ion-item id= "rounded" >
+                <ion-label stacked>Email</ion-label> 
+              <ion-input type="text" placeholder="{{user.email}}" formControlName="email" [disabled]="einactive" >{{user.email}}</ion-input>
+               
+            <button class = "editButton" ion-button item-end (click)="changeEmailStatus()">
+             <ion-icon  name="create"></ion-icon>
+         </button>
+       
+            </ion-item>
 
-      <button ion-button block (click)="userInfo(firstName, lastName)">
-          Create Person
-        </button>
+            <ion-item id= "rounded" >
+              <ion-label stacked>User Name</ion-label> 
+            <ion-input type="text" placeholder="{{user.userName}}" formControlName="userName" [disabled]="inactive">{{user.userName}}</ion-input> 
+            <!-- <button class = "editButton" ion-button item-end (click)="changeStatus()">
+             <ion-icon  name="create"></ion-icon>
+         </button> -->
+          </ion-item>
+            
+          </ion-list>
+            <div padding>
+                <div class="form-error">{{signupError}}</div>
+  
+              <button class= "button" ion-button icon-left type = "submit">
+                  <ion-icon name= "person-add"></ion-icon>Update</button>
+            </div> 
+      <!-- <button (click) = "doRegister()">
+        Register
+      </button> -->
 
-
+      <ion-buttons *ngIf="!toggle" end>
+        <button class = "editButton" ion-button (click)="changeStatus()">
+              <h3> <ion-icon  name="create"></ion-icon></h3>
+         </button>
+       </ion-buttons>
+          
+          </form>
+        </div>
+        </div>
 
         <p>
-            {{this.email}}
+            {{user.email}}
           </p>
 
 </ion-content>

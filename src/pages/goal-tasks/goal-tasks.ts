@@ -58,16 +58,13 @@ export class GoalTasksPage {
 
   
   ionViewWillEnter(){
-  /*  this.tasksCollectionRef = this.afs.collection('Tasks', ref  => ref.where("goalID", "==", this.goalID).orderBy("priority"));
-    this.tasksDoc = this.afs.doc<Tasks>('Tasks/${task.taskID}');*/
+
     this.tasks$ = this.tasksCollectionRef.snapshotChanges().map(actions => {
           return actions.map(a => {
             const data = a.payload.doc.data() as Tasks;
-         //   var task = data;
+         
             console.log(data);
-          //  data.priority = a.payload.newIndex +1;
-           // task.priority = data.priority;
-           // task.taskID = a.payload.doc.id;
+          
             return data;
           });
         });
@@ -147,7 +144,8 @@ isChecked(task:Tasks ,ev)
      else if(!ev.checked)
      {
        task.checked = false;
-       task.priority = task.priority -1;
+      this.tasks.map((item)=>{
+      return item.priority+1;});
        this.dataService.updateTask(task);
      }
      

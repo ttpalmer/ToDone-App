@@ -38,7 +38,9 @@ export class Data {
   constructor(public afs: AngularFirestore, private afAuth : AngularFireAuth) {
     
     this.afAuth.authState.subscribe(user =>{
-      if(user) this.userID = user.uid
+     // let user = firebase.auth().currentUser;
+      console.log(user);
+      if(user) this.userID = user.uid;
       console.log('This users ID is: ' + this.userID);
          this.goalsCollectionRef = this.afs.collection('Goals', ref => ref.where("userID", "==", this.userID).orderBy('dateCreated'));
       this.goals$ = this.goalsCollectionRef.snapshotChanges().map(actions => {
@@ -51,7 +53,7 @@ export class Data {
       });
   
     });
-    console.log('Hello Data Provider');
+    
 
   }
 

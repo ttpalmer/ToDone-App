@@ -1,3 +1,4 @@
+import { TabsPage } from './../pages/tabs/tabs';
 import { HomePage } from './../pages/home/home';
 import { LaunchPage } from './../pages/launch/launch';
 import { LoginPage } from './../pages/login/login';
@@ -42,9 +43,10 @@ export class MyApp {
       if (!user)
       {
         this.rootPage = LaunchPage;
+        unsubscribe();
       }
       else{
-        this.rootPage = HomePage;
+        this.rootPage = TabsPage;
         unsubscribe();
       }
     });
